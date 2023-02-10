@@ -40,20 +40,10 @@ namespace EasySave.Model
                 if (File.Exists(file))
                 {
                     backupConfigs = JsonConvert.DeserializeObject<List<Config>>(File.ReadAllText(file));
-
-                    if (backupConfigs.Count >= 5)
-                    {
-                        throw new Exception("MaxConf");
-                    }
-       
                 }
                 backupConfigs.Add(config);
                 File.WriteAllText(file, JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));
                        throw new Exception("SaveCreated");
-
-                return "Le travail de sauvegarde est créé !";
-            
-            
         }
     }
 }
