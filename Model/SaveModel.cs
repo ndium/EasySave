@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 //classe de log
 using static EasySave.Model.LogJsonModel;
+using System.IO;
 
 namespace EasySave.Model
 {
