@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:EasySaveV2"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
+        <FontFamily x:Key="Roboto">./Fonts/Roboto.ttf#Roboto</FontFamily>
+        <FontFamily x:Key="SassyFrass">./Fonts/SassyFrass.ttf#SassyFrass</FontFamily>
+        <FontFamily x:Key="Orbitron">./Fonts/Orbitron-Medium.ttf#Orbitron Medium</FontFamily>
     </Application.Resources>
+    
 </Application>
