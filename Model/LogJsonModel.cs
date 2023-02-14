@@ -34,17 +34,17 @@ namespace EasySave.Model
         public string TimeStamp { get; set; }
             
 
-        public List<string> GetConfigFile(string path)
+        public List<Config> GetConfigFile(string path)
         {
             string fileContent = File.ReadAllText(path);
 
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
-            List<string> ConfigFiles = new List<string>();
-            foreach(var config in JsonConfig)
-            {
-                ConfigFiles.Add($"{config.BackupName},\n Source : {config.SourceDirectory},\n Destination : {config.TargetDirectory}, \n Type : {config.BackupType}\n");
-            }
-            return ConfigFiles;
+            //List<string> ConfigFiles = new List<string>();
+            //foreach(var config in JsonConfig)
+            //{
+            //    ConfigFiles.Add($"{config.BackupName},\n Source : {config.SourceDirectory},\n Destination : {config.TargetDirectory}, \n Type : {config.BackupType}\n");
+            //}
+            return JsonConfig;
         }
         public Config ReadJsonConfig(string path, int index)
         {

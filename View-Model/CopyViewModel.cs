@@ -46,11 +46,11 @@ namespace EasySave.View_Model
             return obj;
 
         }
-        public List<string> GetConfigs()
+        public List<Config> GetConfigs()
         {
 
             var jsonModel = new LogJsonModel();
-            List<string> obj = jsonModel.GetConfigFile(_file);
+            List<Config> obj = jsonModel.GetConfigFile(_file);
             return obj;
         }
     }

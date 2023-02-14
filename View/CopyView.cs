@@ -20,50 +20,50 @@ namespace EasySave.View
         }
         public void Show()
         {
-            var viewModel = new CopyViewModel();
-            List<string> list = viewModel.GetConfigs();
+            //var viewModel = new CopyViewModel();
+            //List<string> list = viewModel.GetConfigs();
 
-            List<int> selectedWorks = new List<int>();
-            bool done = false;
-            int i = 0;
-            string line = $"{i} \n";
-            string count = "";
+            //List<int> selectedWorks = new List<int>();
+            //bool done = false;
+            //int i = 0;
+            //string line = $"{i} \n";
+            //string count = "";
 
-            while (!done)
-            {
-                i = 0;
-                Console.WriteLine("Choisissez un ou plusieurs travaux de sauvegarde (5 pour terminer) : \n");
-                Console.WriteLine($"Actuellement selectionnés :{count}");
-                foreach (var config in list)
-                {
-                    line = $"{i} \n";
-                    Console.WriteLine($"{line}{config}");
-                    i++;
+            //while (!done)
+            //{
+            //    i = 0;
+            //    Console.WriteLine("Choisissez un ou plusieurs travaux de sauvegarde (5 pour terminer) : \n");
+            //    Console.WriteLine($"Actuellement selectionnés :{count}");
+            //    foreach (var config in list)
+            //    {
+            //        line = $"{i} \n";
+            //        Console.WriteLine($"{line}{config}");
+            //        i++;
 
-                }
-
-
-
-                string input = Console.ReadLine();
-                int option;
+            //    }
 
 
-                if (int.TryParse(input, out option) && option >= 0 && option <= list.Count() - 1 || option == 5)
-                {
-                    if (option == 5)
-                    {
-                        done = true;
-                    }
-                    else
-                    {
-                        selectedWorks.Add(option);
-                        count += $"[{option}],  ";
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Entrée non valide. Veuillez réessayer.");
-                }
+
+            //    string input = Console.ReadLine();
+            //    int option;
+
+
+            //    if (int.TryParse(input, out option) && option >= 0 && option <= list.Count() - 1 || option == 5)
+            //    {
+            //        if (option == 5)
+            //        {
+            //            done = true;
+            //        }
+            //        else
+            //        {
+            //            selectedWorks.Add(option);
+            //            count += $"[{option}],  ";
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Entrée non valide. Veuillez réessayer.");
+            //    }
 
 
                 //    Console.WriteLine("Choisissez le type de sauvegarde : \n [1] - Complète \n [2] - Différentielle \n ");
@@ -83,9 +83,9 @@ namespace EasySave.View
                 //}
 
 
-            }
+            //}
 
-            viewModel.GetCopyModel(selectedWorks);
+            //viewModel.GetCopyModel(selectedWorks);
         }
     }
 }
