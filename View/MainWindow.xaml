@@ -134,7 +134,8 @@
                 </MenuItem>
 
                 <MenuItem Foreground="#FFFFFF"
-                          FontFamily="{StaticResource Roboto}" Height="35" >
+                          FontFamily="{StaticResource Roboto}" Height="35"
+                          Click="MenuItem_Click_Close">
 
                     <MenuItem.Icon>
                         <Image Source="../Assets/Logos/logout.png" Width="20" Height="20" Margin="4,-4,-8,-4"/>
@@ -164,6 +165,7 @@
                     <Image Source="../Assets/Logos/maximize.png"
                    Margin="-2,-2,-2,-2"/>
         </Button>
+        <Frame x:Name="MySaves" NavigationUIVisibility="Hidden" Margin="230,0,0,0" Navigated="MySaves_Navigated"/>
 
     </Grid>
 </Window>
