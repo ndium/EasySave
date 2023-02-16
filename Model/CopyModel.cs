@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,150 +9,148 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace EasySave.Model
 {
     public class CopyModel
     {
-        public bool CheckBusinessApp()
+        public event EventHandler ProgressChanged;
+
+        private double _progress { get; set; }
+        public double Progress
         {
-            // Charger les applications à partir du fichier JSON
-
-            string AppPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
-            string file = Path.Combine(AppPath, "applications.json");
-            string json = File.ReadAllText(file);
-            var applications = JsonConvert.DeserializeObject<string[]>(json);
-
-            // Vérifier si les applications sont ouvertes
-            bool canSave = true;
+            get { return Progress; }
+            set
             foreach (string application in applications)
+            
+            
+            get { return Progress; }
+            set
             {
-                Process[] processList = Process.GetProcessesByName(application);
-                if (processList.Length > 0)
+                if (_progress != value)
                 {
-                    Console.WriteLine("L'application " + application + " est en cours d'exécution et bloque la sauvegarde");
-                    canSave = false;
-                    break;
+                    Progress = value;
+                    ProgressChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
-            return canSave;
         }
+
+     
+
+       
 
 
         public void FullCopy(Config config)
         {
             // Effectuer la sauvegarde si possible
-            if (CheckBusinessApp())
+            if (!CheckBusinessApp())
+                throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+
+
+            string sourceFile = config.SourceDirectory;
+            string targetFile = config.TargetDirectory;
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            if (sourceFile != null)
             {
-                string sourceFile = config.SourceDirectory;
-                string targetFile = config.TargetDirectory;
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                if (sourceFile != null)
+                var dir = new DirectoryInfo(sourceFile);
+
+                if (!dir.Exists)
                 {
-                    var dir = new DirectoryInfo(sourceFile);
 
-                    if (!dir.Exists)
+
+                    var fileinfo = new FileInfo(sourceFile);
+                    string filename = Path.GetFileName(sourceFile);
+                    var fileSize = fileinfo.Length;
+                    targetFile = Path.Combine(targetFile, filename);
+                    if (!fileinfo.Exists)
+                        throw new FileNotFoundException($"{sourceFile} does not exist");
+                    using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
                     {
-
-
-                        var fileinfo = new FileInfo(sourceFile);
-                        string filename = Path.GetFileName(sourceFile);
-                        var fileSize = fileinfo.Length;
-                        targetFile = Path.Combine(targetFile, filename);
-                        if (!fileinfo.Exists)
-                            throw new FileNotFoundException($"{sourceFile} does not exist");
-                        using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
+                        using (var target = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (var target = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+                            // Allocation d'un buffer de lecture de 4 Ko
+                            var buffer = new byte[4096];
+                            int bytesRead;
+                            int totalBytes = 0;
+
+                            // Boucle de lecture et d'écriture
+                            while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
-                                // Allocation d'un buffer de lecture de 4 Ko
-                                var buffer = new byte[4096];
-                                int bytesRead;
-                                int totalBytes = 0;
+                                target.Write(buffer, 0, bytesRead);
+                                totalBytes += bytesRead;
 
-                                // Boucle de lecture et d'écriture
-                                while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
-                                {
-                                    target.Write(buffer, 0, bytesRead);
-                                    totalBytes += bytesRead;
-
-                                    // Calcul de la progression
-                                    var progress = (int)((totalBytes / (double)fileSize) * 100);
-
-                                    // Affichage de la barre de progression
-                                    Console.Write("\r{0}% [{1}{2}]", progress, new string('#', progress), new string(' ', 100 - progress));
-                                }
+                                // Calcul de la progression
+                                _progress = (int)((totalBytes / (double)fileSize) * 100);
                             }
                         }
-                        watch.Stop();
-                        double timeElapsed = watch.Elapsed.TotalSeconds;
-                        var logJsonModel = new LogJsonModel();
-                        logJsonModel.SaveLog(fileSize, timeElapsed, config);
-
                     }
+                    watch.Stop();
+                    double timeElapsed = watch.Elapsed.TotalSeconds;
+                    var logJsonModel = new LogJsonModel();
+                    logJsonModel.SaveLog(fileSize, timeElapsed, config);
 
-                    else
-                    {
-
-                        var sourceFolderInfo = new DirectoryInfo(sourceFile);
-                        long totalSize = GetDirectorySize(sourceFolderInfo);
-                        long totalBytes = 0;
-                        CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
-                        watch.Stop();
-                        double timeElapsed = watch.Elapsed.TotalSeconds;
-                        var logJsonModel = new LogJsonModel();
-                        logJsonModel.SaveLog(totalSize, timeElapsed, config);
-                    }
                 }
+
                 else
                 {
-                    Console.WriteLine("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+
+                    var sourceFolderInfo = new DirectoryInfo(sourceFile);
+                    long totalSize = GetDirectorySize(sourceFolderInfo);
+                    long totalBytes = 0;
+                    CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+                    watch.Stop();
+                    double timeElapsed = watch.Elapsed.TotalSeconds;
+                    var logJsonModel = new LogJsonModel();
+                    logJsonModel.SaveLog(totalSize, timeElapsed, config);
                 }
+
+
             }
-            
+
             void CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
             {
-                if (CheckBusinessApp())
+                if (!CheckBusinessApp())
                 {
-                    // Création du dossier cible s'il n'existe pas
-                    Directory.CreateDirectory(targetFolder);
+                    throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                }
+
+                // Création du dossier cible s'il n'existe pas
+                Directory.CreateDirectory(targetFolder);
 
 
-                    // Boucle de copie des fichiers
-                    foreach (var fileInfo in sourceDirectoryInfo.GetFiles())
+                // Boucle de copie des fichiers
+                foreach (var fileInfo in sourceDirectoryInfo.GetFiles())
+                {
+
+                    var sourceFile = fileInfo.FullName;
+                    var targetFile = Path.Combine(targetFolder, fileInfo.Name);
+
+                    // Copie du fichier
+                    using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
                     {
-                        var sourceFile = fileInfo.FullName;
-                        var targetFile = Path.Combine(targetFolder, fileInfo.Name);
-
-                        // Copie du fichier
-                        using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
+                        using (var target = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (var target = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+                            var buffer = new byte[4096];
+                            int bytesRead;
+
+                            while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
-                                var buffer = new byte[4096];
-                                int bytesRead;
+                                target.Write(buffer, 0, bytesRead);
+                                totalBytes += bytesRead;
 
-                                while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
-                                {
-                                    target.Write(buffer, 0, bytesRead);
-                                    totalBytes += bytesRead;
+                                // Calcul de la progression
+                                _progress = (int)((totalBytes / (double)totalSize) * 100);
 
-                                    // Calcul de la progression
-                                    var progress = (int)((totalBytes / (double)totalSize) * 100);
-
-                                    // Affichage de la barre de progression
-                                    Console.Write("\r{0}% [{1}{2}]", progress, new string('#', progress), new string(' ', 100 - progress));
-
-                                }
                             }
+
                         }
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
-                }
+
+
+
 
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
@@ -208,6 +206,34 @@ namespace EasySave.Model
             {
                 Console.WriteLine("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
             }
+        }
+
+        public bool CheckBusinessApp()
+        {
+            // Charger les applications à partir du fichier JSON
+
+            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string file = Path.Combine(appPath, "applications.json");
+            if (!File.Exists(file))
+            {
+                return true;
+            }
+            string json = File.ReadAllText(file);
+            var applications = JsonConvert.DeserializeObject<string[]>(json);
+
+            // Vérifier si les applications sont ouvertes
+            bool canSave = true;
+            foreach (string application in applications)
+            {
+                Process[] processList = Process.GetProcessesByName(application);
+                if (processList.Length > 0)
+                {
+                    Console.WriteLine("L'application " + application + " est en cours d'exécution et bloque la sauvegarde");
+                    canSave = false;
+                    break;
+                }
+            }
+            return canSave;
         }
     }
 }

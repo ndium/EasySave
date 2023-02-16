@@ -3,6 +3,7 @@ using EasySave.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,13 +24,33 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class SavesView : Page
     {
+        public CopyViewModel _copyViewModel { get; set; }
         public SavesView()
         {
             InitializeComponent();
             DataContext = this;
-            var viewModel = new CopyViewModel();
-            List<Config> list = viewModel.GetConfigs();
+            _copyViewModel = new CopyViewModel();
+            List<Config> list = _copyViewModel.GetConfigs();
             SaveGrid.ItemsSource = list;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            List<Config> selectedConfigs = new List<Config>();
+            
+            foreach(var item in SaveGrid.SelectedItems)
+            {
+                if (item is Config config) 
+                { 
+                    selectedConfigs.Add(config);
+                }
+            }
+            
+            _copyViewModel.GetCopyModel(selectedConfigs);
+
+
+
+
         }
     }
 }
