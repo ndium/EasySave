@@ -69,7 +69,7 @@ namespace EasySave.Model
 
 
                 string logjson = JsonConvert.SerializeObject(listLog);
-                File.WriteAllText("log.json", logjson);
+                File.WriteAllText("statelog.json", logjson);
             }
 
 
