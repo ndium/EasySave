@@ -78,7 +78,7 @@
                 </MenuItem>
 
                 <MenuItem Foreground="#FFFFFF"
-                          FontFamily="{StaticResource Roboto}" Height="35" Click="MenuItem_Click_1">
+                          FontFamily="{StaticResource Roboto}" Height="35" Click="MenuItem_Click_1" VerticalAlignment="Top">
 
                     <MenuItem.Icon>
                         <Image Source="../Assets/Logos/log-file.png" Width="20" Height="20" Margin="4,-4,-8,-4"/>
@@ -92,7 +92,7 @@
                 </MenuItem>
 
                 <MenuItem Foreground="#FFFFFF"
-                          FontFamily="{StaticResource Roboto}" Height="35">
+                          FontFamily="{StaticResource Roboto}" Height="35" Click="MenuItem_Click_2">
 
                     <MenuItem.Icon>
                         <Image Source="../Assets/Logos/data-encryption.png" Width="20" Height="20" Margin="4,-4,-8,-4"/>
