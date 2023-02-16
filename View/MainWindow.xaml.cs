@@ -71,5 +71,10 @@ namespace EasySaveV2
         {
             MySaves.Content = new FileEncryptView();
         }
+
+        private void NewApplicationMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MySaves.Content = new FiltersView();
+        }
     }
 }

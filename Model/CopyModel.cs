@@ -20,7 +20,14 @@ namespace EasySave.Model
 
             string AppPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
             string file = Path.Combine(AppPath, "applications.json");
+
+            if (!File.Exists(file) || new FileInfo(file).Length == 0)
+            {
+                return true;
+            }
+
             string json = File.ReadAllText(file);
+
             var applications = JsonConvert.DeserializeObject<string[]>(json);
 
             // Vérifier si les applications sont ouvertes

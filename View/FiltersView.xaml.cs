@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySaveV2.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,21 @@ namespace EasySaveV2.View
         public FiltersView()
         {
             InitializeComponent();
+        }
+
+        private void OnSaveApp(object sender, RoutedEventArgs e)
+        {
+            string appName = txtAppName.Text;
+            try
+            {
+                var businessAppModel = new BusinessAppModel();
+                businessAppModel.SaveApp(appName);
+                MessageBox.Show("Application sauvegardée avec succès.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors de la sauvegarde de l'application : " + ex.Message);
+            }
         }
     }
 }
