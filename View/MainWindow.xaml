@@ -107,14 +107,14 @@
                 </MenuItem>
 
                 <MenuItem Foreground="#FFFFFF"
-                          FontFamily="{StaticResource Roboto}" Click="NewApplicationMenuItem_Click" Height="24" VerticalAlignment="Top" >
+                          FontFamily="{StaticResource Roboto}" Click="NewApplicationMenuItem_Click" Height="35" >
 
                     <MenuItem.Icon>
                         <Image Source="../Assets/Logos/filter.png" Width="20" Height="20" Margin="4,-4,-8,-4"/>
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="Filters" Margin="0,0,0,8" RenderTransformOrigin="1.133,0.405"/>
+                        <TextBlock Text="Filters" Margin="10,0,0,0" />
                     </MenuItem.Header>
 
 
