@@ -16,7 +16,7 @@ namespace EasySaveV2.Model
 
         }
 
-        public string CreateSave(string AppName)
+        public string SaveApp(string AppName)
         {
 
             var BusinessApp = new BusinessApp();
