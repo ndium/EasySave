@@ -43,25 +43,33 @@ namespace EasySaveV2
 
         }
 
+        //bouton sauvegarde
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MySaves.Content= new SavesView();
+            MySaves.Content = new SavesView();
         }
 
+        //bouton log
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-
+            MySaves.Content = new LogsView();
         }
 
+        //bouton close
         private void MenuItem_Click_Close(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-
         }
 
         private void MySaves_Navigated(object sender, NavigationEventArgs e)
         {
+            
+        }
 
+        //bouton parametre chiffrement
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            MySaves.Content = new FileEncryptView();
         }
     }
 }
