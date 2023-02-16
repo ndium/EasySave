@@ -16,6 +16,8 @@ using System.Net;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows.Shapes;
 
 namespace EasySave.Model
 {
@@ -39,11 +41,6 @@ namespace EasySave.Model
             string fileContent = File.ReadAllText(path);
 
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
-            //List<string> ConfigFiles = new List<string>();
-            //foreach(var config in JsonConfig)
-            //{
-            //    ConfigFiles.Add($"{config.BackupName},\n Source : {config.SourceDirectory},\n Destination : {config.TargetDirectory}, \n Type : {config.BackupType}\n");
-            //}
             return JsonConfig;
         }
         public Config ReadJsonConfig(string path, int index)
@@ -55,23 +52,33 @@ namespace EasySave.Model
             var obj = JsonConfig[index];
             return obj;
         }
+       public LogJsonModel getLogJsonModel() => this;
 
-
+        public List<LogJsonModel> getListLog(string path)
+        {
+            string fileContent = File.ReadAllText(path);
+            List<LogJsonModel> logJsonModels = JsonConvert.DeserializeObject<List<LogJsonModel>>(fileContent);
+           
+           
+            return logJsonModels;
+        }
 
         public void SaveLog(long filesize, double transfertTime,Config config)
         {
            
-            //A CHANGER IMMEDIATEMENT !
+            
             string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
             string file = Path.Combine(backupConfigFile, "config.json");
             string logFilePath = Path.Combine(backupConfigFile, "log.json");
             var listLog = new List<LogJsonModel>();
 
+            //vérification de l'existence du fichier
             if (!File.Exists(@$"{logFilePath}"))
             {
 
                 try
                 {
+                        //création de la liste
                         listLog.Add(new LogJsonModel
                         {
                             Name = config.BackupName,
@@ -118,7 +125,7 @@ namespace EasySave.Model
                 // Écrire le JSON mis à jour dans le fichier
                 File.WriteAllText(logFilePath, updatedJson);
             }
-
+            
 
 
         }

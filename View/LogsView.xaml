@@ -5,10 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EasySaveV2.View"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="LogsView">
+      d:DesignHeight="700" d:DesignWidth="770"
+      Title="LogsView"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-    <Grid>
-        
+    <Grid Background="#14213d">
+       
+          <ScrollViewer Width="600" Margin="0,10,200,10" CanContentScroll="True" >
+
+
+            <ItemsControl x:Name="SaveGrid" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" Margin="10">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Select file format:" />
+                    <RadioButton Name="xmlRadio" Content="XML" IsChecked="True" />
+                    <RadioButton Name="jsonRadio" Content="JSON" />
+                    <Button Content="Convert" Click="ConvertButton_Click" />
+                </StackPanel>
+
+            </ItemsControl>
+        </ScrollViewer>
+
+
+       
     </Grid>
+
 </Page>
