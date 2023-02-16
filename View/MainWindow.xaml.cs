@@ -79,5 +79,10 @@ namespace EasySaveV2
         {
             MySaves.Content = new FiltersView();
         }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

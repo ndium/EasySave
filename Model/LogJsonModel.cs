@@ -17,7 +17,6 @@ using System.Xml.Linq;
 using System.Reflection;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
-using System.Windows.Shapes;
 
 namespace EasySave.Model
 {

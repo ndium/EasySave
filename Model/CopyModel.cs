@@ -20,11 +20,7 @@ namespace EasySave.Model
         private double _progress { get; set; }
         public double Progress
         {
-            get { return Progress; }
-            set
-            foreach (string application in applications)
-            
-            
+           
             get { return Progress; }
             set
             {

@@ -32,15 +32,15 @@ namespace EasySaveV2.View
         public LogsView()
         {
             InitializeComponent();
-            
+
             var logs = new LogViewModel();
             /*List<Config> list = LogJson.log
             SaveGrid.ItemsSource = list;*/
             DataContext = this;
             try
             {
-                
-                
+
+
             }
             catch
             {
@@ -49,26 +49,26 @@ namespace EasySaveV2.View
             }
 
 
-           
-            
+
+
         }
 
-        
 
-        /*public void ConvertButton_Click(object sender, RoutedEventArgs e)
+
+        public void ConvertButton_Click(object sender, RoutedEventArgs e)
         {
-            string filePath = "path/to/file";
-            bool useXml = xmlRadio.IsChecked ?? false;
+            //string filePath = "path/to/file";
+            //bool useXml = xmlRadio.IsChecked ?? false;
 
-            if (useXml)
-            {
-                // convert file to XML
-            }
-            else
-            {
-                // convert file to JSON
-            }
-        }*/
+            //if (useXml)
+            //{
+            //    // convert file to XML
+            //}
+            //else
+            //{
+            //    // convert file to JSON
+            //}
+        }
 
     }
 }
