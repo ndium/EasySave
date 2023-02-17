@@ -10,6 +10,24 @@
 
     <Grid Background="#14213D">
 
+        <ListBox x:Name="ExtendGrid" BorderBrush="Transparent"
+                 Background="Transparent" Margin="130,10,120,266" 
+                 Foreground="White" ScrollViewer.CanContentScroll="True" 
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                 SelectionMode="Multiple">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4">
+                        <TextBlock Text="{Binding Name}" Margin="0,0,0,0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
 
         <Label Content="Saisissez une extension de fichier : " Width="200" Height="25" Margin="185,453,385,222" Foreground="White"></Label>
         <TextBox Width="400" Height="20" Margin="190,483,180,197"></TextBox>

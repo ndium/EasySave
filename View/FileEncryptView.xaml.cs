@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EasySave.Model;
+using EasySave.View_Model;
+using EasySaveV2.View_Model;
 
 namespace EasySaveV2.View
 {
@@ -20,9 +23,13 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class FileEncryptView : Page
     {
+        public FileEncryptViewModel _fileEncryptViewModel { get; set; }
         public FileEncryptView()
         {
             InitializeComponent();
+            DataContext = this;
+            List<Extension> list = _fileEncryptViewModel.GetList();
+            ExtendGrid.ItemsSource = list;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
