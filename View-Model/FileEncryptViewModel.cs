@@ -21,5 +21,15 @@ namespace EasySaveV2.View_Model
         {
             return _fileEncryptModel.GetList();
         }
+
+        public void addExtension(string extensionName)
+        {
+            _fileEncryptModel.addExtensionToList(extensionName);
+        }
+
+        public void removeExtension(string extensionName)
+        {
+            _fileEncryptModel.removeExtensionToList(extensionName);
+        }
     }
 }

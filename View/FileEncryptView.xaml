@@ -30,7 +30,7 @@
         </ListBox>
 
         <Label Content="Saisissez une extension de fichier : " Width="200" Height="25" Margin="185,453,385,222" Foreground="White"></Label>
-        <TextBox Width="400" Height="20" Margin="190,483,180,197"></TextBox>
+        <TextBox Name="InputExt" Width="400" Height="20" Margin="190,483,180,197"></TextBox>
         <Button Width="80" Height="30" Margin="510,521,180,149" Click="Button_Click" Content="Ajouter"></Button>
         <Button Width="80" Height="30" Margin="425,521,265,149" Content="Supprimer" Click="Button_Click_1"></Button>
 

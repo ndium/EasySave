@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace EasySaveV2.Model
 {
     public class Extension
     {
+        public Extension(string extension)
+        {
+            Name = extension;
+        }
+
         public string Name { get; set; }
     }
     public class FileEncryptModel
@@ -16,28 +23,52 @@ namespace EasySaveV2.Model
         public FileEncryptModel()
         {
             _listExtension = new List<Extension>();
-
         }
 
         public List<Extension> GetList()
         {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\extension.json";
+            string json = File.ReadAllText(filePath);
+            _listExtension = JsonConvert.DeserializeObject<List<Extension>>(json);
             return _listExtension;
         }
 
-        public void addExtensionToList(Extension extension)
+        public void addExtensionToList(string extension)
         {
-            _listExtension.Add(extension);
+            _listExtension.Add(new Extension(extension));
+            this.createJson();
         }
 
         public void removeExtensionToList(string name)
         {
-            foreach (Extension e in _listExtension)
+            try
             {
-                if (e.Name == name)
+                foreach (Extension e in _listExtension)
                 {
-                    _listExtension.Remove(e);
+                    if (e.Name == name)
+                    {
+                        _listExtension.Remove(e);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+            }
+            
+            this.createJson();
+        }
+
+        public void createJson()
+        {
+            string json = JsonConvert.SerializeObject(_listExtension, Formatting.Indented);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\extension.json";
+
+            //Si le fichier existe on le supprime pour un nouveau
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            File.WriteAllText(filePath, json);
         }
     }
 }
