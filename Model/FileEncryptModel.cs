@@ -27,7 +27,7 @@ namespace EasySaveV2.Model
 
         public List<Extension> GetList()
         {
-            string filePath = @"C:\Users\ploua\Desktop\temp\extension.json";
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\extension.json";
             string json = File.ReadAllText(filePath);
             _listExtension = JsonConvert.DeserializeObject<List<Extension>>(json);
             return _listExtension;
@@ -61,10 +61,10 @@ namespace EasySaveV2.Model
         public void createJson()
         {
             string json = JsonConvert.SerializeObject(_listExtension, Formatting.Indented);
-            string filePath = @"C:\Users\ploua\Desktop\temp\extension.json";
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\extension.json";
 
             //Si le fichier existe on le supprime pour un nouveau
-            if(File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
