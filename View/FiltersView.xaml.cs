@@ -1,4 +1,6 @@
 ﻿using EasySaveV2.Model;
+using System.IO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
+using EasySaveV2.View_Model;
 
 namespace EasySaveV2.View
 {
@@ -21,24 +25,40 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class FiltersView : Page
     {
+        public FiltersViewModel _filtersViewModel { get; set; }
         public FiltersView()
         {
             InitializeComponent();
+            DataContext = this;
+            _filtersViewModel = new FiltersViewModel();
+            Refresh();
         }
 
         private void OnSaveApp(object sender, RoutedEventArgs e)
         {
-            string appName = txtAppName.Text;
+            string AppName = txtAppName.Text;
             try
             {
-                var businessAppModel = new BusinessAppModel();
-                businessAppModel.SaveApp(appName);
+                if (_filtersViewModel.AppExists(AppName))
+                {
+                    MessageBox.Show("L'application existe déjà.");
+                }
+                _filtersViewModel.SaveApp(AppName);
                 MessageBox.Show("Application sauvegardée avec succès.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Erreur lors de la sauvegarde de l'application : " + ex.Message);
+                MessageBox.Show("Erreur lors de la sauvegarde de l'application : " + AppName);
             }
+            Refresh();
         }
+
+        public void Refresh()
+        {
+            // Afficher le contenu dans une zone de texte
+            myTextBox.Text = _filtersViewModel.GetJson();
+        }
+
+
     }
 }
