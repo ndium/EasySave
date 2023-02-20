@@ -1,5 +1,5 @@
-﻿using EasySave.Model;
-using EasySave.View_Model;
+﻿using EasySaveV2.Model;
+using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +19,6 @@ using System.IO;
 using Newtonsoft.Json;
 using Path = System.IO.Path;
 using System.Reflection;
-using EasySaveV2.View_Model;
 
 namespace EasySaveV2.View
 {

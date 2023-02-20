@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EasySave.Lang {
+namespace EasySaveV2.Lang {
     using System;
     
     

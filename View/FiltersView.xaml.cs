@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using EasySaveV2.View_Model;
 
+
 namespace EasySaveV2.View
 {
     /// <summary>
@@ -32,6 +33,13 @@ namespace EasySaveV2.View
             DataContext = this;
             _filtersViewModel = new FiltersViewModel();
             Refresh();
+        }
+
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            AppList.Text = $"{langHelper._rm.GetString("AppList")}";
+            AddApp.Text = $"{langHelper._rm.GetString("AddApp")}";
         }
 
         private void OnSaveApp(object sender, RoutedEventArgs e)

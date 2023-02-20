@@ -1,5 +1,5 @@
-﻿using EasySave.Model;
-using EasySave.View_Model;
+﻿using EasySaveV2.Model;
+using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace EasySaveV2.View
         {
             InitializeComponent();
             DataContext = this;
-               
+
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

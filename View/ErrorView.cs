@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.Model;
+using EasySaveV2.Model;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
     public class ErrorView
     {
@@ -20,7 +20,7 @@ namespace EasySave.View
         {
             Console.Write($"{langHelper._rm.GetString(message, CultureInfo.CurrentUICulture)}\n");
             Console.ReadKey();
-            SaveView mainView = new SaveView();
+            //SaveView mainView = new SaveView();
         }
 
     }

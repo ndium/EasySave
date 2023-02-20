@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.View_Model;
+using EasySaveV2.View_Model;
+using EasySaveV2.Model;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
     public class EditView
     {
@@ -16,8 +17,8 @@ namespace EasySave.View
 
         public void Show()
         {
-            var saveView = new SaveView();
-            saveView.Welcome();
+           /* var saveView = new SaveView();
+            saveView.Welcome();*/
 
             /*while (true)
             {

@@ -1,15 +1,15 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.Model;
-using EasySave.View_Model;
+using EasySaveV2.Model;
+using EasySaveV2.View_Model;
 using Newtonsoft.Json;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
 
     public class CreateView
@@ -58,3 +58,4 @@ namespace EasySave.View
     }
 
 }
+*/

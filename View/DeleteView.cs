@@ -1,13 +1,13 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EasySave.View_Model;
 using System.Globalization;
-using EasySave.Model;
+using EasySaveV2.Model;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
     public class DeleteView
     {
@@ -33,3 +33,4 @@ namespace EasySave.View
         }
     }
 }
+*/

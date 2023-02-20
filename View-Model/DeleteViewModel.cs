@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.Model;
-using EasySave.View;
+using EasySaveV2.Model;
+using EasySaveV2.View;
 
-namespace EasySave.View_Model
+namespace EasySaveV2.View_Model
 {
     public class DeleteViewModel
     {

@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using EasySave.Model;
-using EasySave.View_Model;
 using EasySaveV2.Model;
 using EasySaveV2.View_Model;
 

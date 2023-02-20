@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
     public class Statelog : LogJsonModel
     {
