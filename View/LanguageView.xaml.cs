@@ -25,5 +25,15 @@ namespace EasySaveV2.View
             InitializeComponent();
             DataContext = this;
         }
+
+        public void ChangeLanguageFrench(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public void ChangeLanguageEnglish(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
