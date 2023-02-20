@@ -217,14 +217,20 @@ namespace EasySave.Model
 
             // Vérifier si les applications sont ouvertes
             bool canSave = true;
-            foreach (string application in applications)
+            if (applications == null || applications.Length == 0)
             {
-                Process[] processList = Process.GetProcessesByName(application);
-                if (processList.Length > 0)
+                canSave = true;
+            }
+            else
+            {
+                foreach (string application in applications)
                 {
-                    Console.WriteLine("L'application " + application + " est en cours d'exécution et bloque la sauvegarde");
-                    canSave = false;
-                    break;
+                    Process[] processList = Process.GetProcessesByName(application);
+                    if (processList.Length > 0)
+                    {
+                        canSave = false;
+                        break;
+                    }
                 }
             }
             return canSave;
