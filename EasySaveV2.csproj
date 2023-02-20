@@ -47,6 +47,9 @@
     <Resource Include="Assets\Logos\filter.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Logos\french_flag.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Logos\log.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
