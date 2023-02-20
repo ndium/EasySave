@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
-        public enum SaveType
-        {
-            Complete = 1,
-            Differential = 2
-        }
+    public enum SaveType
+    {
+        Complete = 1,
+        Differential = 2
+    }
 
     public enum Lang
     {
 
-        [Description ("English")]
+        [Description("English")]
         en,
 
         [Description("French")]

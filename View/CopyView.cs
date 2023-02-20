@@ -1,5 +1,5 @@
-﻿using EasySave.Model;
-using EasySave.View_Model;
+﻿/*using EasySaveV2.Model;
+using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
 
     public class CopyView
@@ -89,3 +89,4 @@ namespace EasySave.View
         }
     }
 }
+*/

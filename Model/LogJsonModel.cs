@@ -9,7 +9,7 @@ using NewtonsoftJson = Newtonsoft.Json;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
-using static EasySave.Model.SaveModel;
+using static EasySaveV2.Model.SaveModel;
 using Newtonsoft.Json;
 using System.Security.Principal;
 using System.Net;
@@ -18,7 +18,7 @@ using System.Reflection;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
     public class LogJsonModel
     {

@@ -9,12 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 //Import des éléments du namespace EasySave
-using EasySave.View_Model;
+using EasySaveV2.View_Model;
 using System.Text.RegularExpressions;
 
-namespace EasySave.View
+namespace EasySaveV2.View
 {
-    public class SaveView
+/*    public class SaveView
     {
         private CopyView _copyView;
         private CreateView _createSaveView;
@@ -108,5 +108,5 @@ namespace EasySave.View
 
         }
 
-    }
+    }*/
 }

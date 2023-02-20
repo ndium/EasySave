@@ -11,10 +11,10 @@
 
     <Grid Background="#14213d">
         <StackPanel Margin="235,126,235,250">
-            <TextBlock Text="Nom de l'application à bloquer :" Foreground ="White" FontFamily="{StaticResource Roboto}" />
+            <TextBlock Name ="AddApp"  Foreground ="White" FontFamily="{StaticResource Roboto}" />
             <TextBox x:Name="txtAppName"/>
             <Button x:Name="SaveFilters_Click" Content="Sauvegarder" FontFamily="{StaticResource Roboto}" Click="OnSaveApp"/>
-            <TextBlock Text="Liste des applications bloquées :" Foreground="White" Height="25" FontFamily="{StaticResource Roboto}" />
+            <TextBlock Name ="AppList"  Foreground="White" Height="25" FontFamily="{StaticResource Roboto}" />
         </StackPanel>
         <TextBox Name="myTextBox" VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" Height="200" Margin="0,232,0,0"/>
 

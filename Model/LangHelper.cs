@@ -8,7 +8,7 @@ using System.Resources;
 using System.Reflection;
 using System.Globalization;
 
-namespace EasySave.Model;
+namespace EasySaveV2.Model;
 
 public class LangHelper
 {
@@ -16,7 +16,7 @@ public class LangHelper
 
     public LangHelper()
     {
-        _rm = new ResourceManager("EasySave.Lang.Resources", Assembly.GetExecutingAssembly());
+        _rm = new ResourceManager("EasySaveV2.Lang.Resources", Assembly.GetExecutingAssembly());
     }
 
     public string? GetString(string name)
@@ -26,7 +26,7 @@ public class LangHelper
 
     public void ChangeLanguage(string language)
     {
-        var cultureInfo = new CultureInfo(language);
+        var cultureInfo = new CultureInfo("en");
 
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;

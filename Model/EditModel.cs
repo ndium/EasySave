@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
     public class EditModel
     {

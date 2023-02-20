@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySaveV2.View"
-        xmlns:vm="clr-namespace:EasySave.View_Model" d:DataContext="{d:DesignInstance Type=vm:CopyViewModel}"
+        xmlns:vm="clr-namespace:EasySaveV2.View_Model" 
         mc:Ignorable="d" 
          d:DesignHeight="700" d:DesignWidth="770"
         Title="LoadingBar" Height="700" Width="770">

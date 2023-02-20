@@ -1,5 +1,4 @@
-﻿using EasySave.Model;
-using EasySave.View;
+﻿using EasySaveV2.Model;
 using EasySaveV2.View;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 
-namespace EasySave.View_Model
+namespace EasySaveV2.View_Model
 {
     public class CopyViewModel
     {

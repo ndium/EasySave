@@ -11,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
     public class CopyModel
     {

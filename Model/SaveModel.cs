@@ -4,18 +4,18 @@ using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.View;
+using EasySaveV2.View;
 using NewtonsoftJson = Newtonsoft.Json;
 
 //Import des éléments du namespace EasySave
-using EasySave.View_Model;
+using EasySaveV2.View_Model;
 using Newtonsoft.Json;
 
 //classe de log
-using static EasySave.Model.LogJsonModel;
+using static EasySaveV2.Model.LogJsonModel;
 using System.IO;
 
-namespace EasySave.Model
+namespace EasySaveV2.Model
 {
     public class SaveModel
     {
