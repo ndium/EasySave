@@ -9,7 +9,7 @@
          d:DesignHeight="700" d:DesignWidth="770"
         Title="LoadingBar" Height="700" Width="770">
     <Grid Background="#14213d">
-        <ProgressBar  Minimum="0" Maximum="100" Value="{Binding Progress}" x:Name="copyProgressBar" Width="500" Height="20"/>
+        <ProgressBar  Minimum="0" Maximum="100"  x:Name="copyProgressBar" Width="500" Height="20"/>
         <TextBlock x:Name="numberProgressBar" Text="" Background="Transparent" Width="20" Height="20" Margin="651,332,99,332">
             
         </TextBlock>

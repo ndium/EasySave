@@ -18,14 +18,11 @@ namespace EasySave.Model
 
         }
 
-        public string CreateSave (string backupName, string sourceDirectory, string targetDirectory, string backupType)
+        public string CreateSave (Config config )
         {
             
-                var config = new Config();
-                config.BackupName = backupName;
-                config.SourceDirectory = sourceDirectory;
-                config.TargetDirectory = targetDirectory;
-                config.BackupType = backupType;
+                
+               
 
                 var backupConfigs = new List<Config>();
                 string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";

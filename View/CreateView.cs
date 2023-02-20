@@ -53,7 +53,7 @@ namespace EasySave.View
             }
 
             var createViewModel = new CreateViewModel();
-            createViewModel.GetCreateModel(backupName, sourceDirectory, targetDirectory, backupType);
+            //createViewModel.GetCreateModel(backupName, sourceDirectory, targetDirectory, backupType);
         }
     }
 

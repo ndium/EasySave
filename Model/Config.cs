@@ -12,7 +12,7 @@ namespace EasySave.Model
         public string BackupName { get; set; }
         public string SourceDirectory { get; set; }
         public string TargetDirectory { get; set; }
-        public string BackupType { get; set; }
+        public SaveType BackupType { get; set; }
 
     }
 }

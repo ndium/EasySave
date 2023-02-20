@@ -15,29 +15,27 @@ namespace EasySave.Model
 {
     public class CopyModel
     {
-        public event EventHandler ProgressChanged;
+        public event EventHandler<int>? ProgressChanged;
 
-        private double _progress { get; set; }
-        public double Progress
+        private int _progress { get; set; }
+        public int Progress
         {
            
-            get { return Progress; }
+            get { return _progress; }
             set
             {
                 if (_progress != value)
                 {
-                    Progress = value;
-                    ProgressChanged?.Invoke(this, EventArgs.Empty);
+                    _progress = value;
+                    ProgressChanged?.Invoke(this, Progress);
                 }
             }
         }
-
-     
-
-       
+        
 
 
-        public void FullCopy(Config config)
+
+        public async Task FullCopy(Config config)
         {
             // Effectuer la sauvegarde si possible
             if (!CheckBusinessApp())
@@ -93,9 +91,9 @@ namespace EasySave.Model
                 {
 
                     var sourceFolderInfo = new DirectoryInfo(sourceFile);
-                    long totalSize = GetDirectorySize(sourceFolderInfo);
+                    long totalSize = await GetDirectorySize(sourceFolderInfo);
                     long totalBytes = 0;
-                    CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+                    await CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
                     var logJsonModel = new LogJsonModel();
@@ -105,7 +103,7 @@ namespace EasySave.Model
 
             }
 
-            void CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
+            async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
             {
                 if (!CheckBusinessApp())
                 {
@@ -151,11 +149,11 @@ namespace EasySave.Model
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
-                    CopyDirectory(subDir, newDestinationDir, totalSize, totalBytes);
+                    await CopyDirectory(subDir, newDestinationDir, totalSize, totalBytes);
                 }
             }
         }
-        private static long GetDirectorySize(DirectoryInfo directoryInfo)
+        private static async Task<long> GetDirectorySize(DirectoryInfo directoryInfo)
         {
             long size = 0;
 
@@ -168,12 +166,12 @@ namespace EasySave.Model
             // Récuperation de la taille des sous-dossiers récursivement
             foreach (var subDirectoryInfo in directoryInfo.GetDirectories())
             {
-                size += GetDirectorySize(subDirectoryInfo);
+                size += await GetDirectorySize(subDirectoryInfo);
             }
 
             return size;
         }
-        public void DifferentialCopy(Config config)
+        public async Task DifferentialCopy(Config config)
         {
             if (CheckBusinessApp())
             {

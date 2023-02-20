@@ -12,6 +12,7 @@
     <None Remove="Assets\Logos\dossier.png" />
     <None Remove="Assets\Logos\file.png" />
     <None Remove="Assets\Logos\filter.png" />
+    <None Remove="Assets\Logos\folder.png" />
     <None Remove="Assets\Logos\log-file.png" />
     <None Remove="Assets\Logos\log.png" />
     <None Remove="Assets\Logos\logout.png" />
@@ -39,6 +40,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logos\filter.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Logos\folder.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logos\log.png">
