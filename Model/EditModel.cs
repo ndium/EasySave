@@ -61,7 +61,7 @@ namespace EasySave.Model
                         backupConfigs[configToModify - 1].BackupName = newBackupName;
                         backupConfigs[configToModify - 1].SourceDirectory = newSourceDirectory;
                         backupConfigs[configToModify - 1].TargetDirectory = newTargetDirectory;
-                        backupConfigs[configToModify - 1].BackupType = newBackupType;
+                        backupConfigs[configToModify - 1].BackupType = (SaveType)Enum.Parse(typeof(SaveType), newBackupType);
 
                         File.WriteAllText(backupConfigFile,
                             JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));

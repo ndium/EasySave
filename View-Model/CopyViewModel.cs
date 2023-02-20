@@ -13,7 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 
 namespace EasySave.View_Model
@@ -32,59 +31,59 @@ namespace EasySave.View_Model
             _copyModel = new CopyModel();
             _copyModel.ProgressChanged += _copyModel_ProgressChanged;
         }
-        public double Progress { get; set; }
+        static double Progress { get; set; }
 
-        private void _copyModel_ProgressChanged(object sender, EventArgs e)
+        private void _copyModel_ProgressChanged(object sender, int e)
         {
-            Progress = _copyModel.Progress;
+            Progress = e;
+            
+
         }
 
 
-        public void GetCopyModel(List<Config> selectedWorks)
+        public async Task GetCopyModel(List<Config> selectedWorks)
         {
-            var i =0;
-            var progressBar = new LoadingBar();
+            var i = 0;
+
+            LoadingBar progressBar = new LoadingBar();
+            progressBar.Show();
+            if (progressBar.Dispatcher.CheckAccess())
+            {
+                progressBar.copyProgressBar.Value = Progress;
+            }
+            else
+            {
+                await progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    progressBar.copyProgressBar.Value = Progress;
+                }));
+            }
+
+
+
+
+
+
+
+
 
             foreach (var config in selectedWorks)
             {
                 i++;
-                if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
-                {
-                    Thread thread = new Thread(() =>
-                    {
-                        var progressBar = new LoadingBar();
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            progressBar.copyProgressBar.Value = Progress;
-                            progressBar.numberProgressBar.Text = $"{i}/{selectedWorks.Count}";
-                        }));
-                        progressBar.Show();
-                        Dispatcher.Run();
-                    });
-                    thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start();
-                    Thread.Sleep(500);
-                }
-                else
-                {
-                    progressBar.copyProgressBar.Value = Progress;
-                    progressBar.numberProgressBar.Text = $"{i}/{selectedWorks.Count}";
-                    progressBar.Show();
-                    Dispatcher.Run();
-                }
+
 
                 if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
                 {
-                    _copyModel.FullCopy(config);
+                    await _copyModel.FullCopy(config);
                 }
                 else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
                 {
-                    _copyModel.DifferentialCopy(config);
+                    await _copyModel.DifferentialCopy(config);
                 }
             }
         }
 
-      
+
         public Config GetConfigInfo(int index)
         {
             var jsonModel = new LogJsonModel();

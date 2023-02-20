@@ -2,6 +2,7 @@
 using EasySave.View_Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,30 @@ namespace EasySaveV2.View
         {
             InitializeComponent();
             DataContext = new CopyViewModel();
+            //BackgroundWorker worker = new BackgroundWorker();
+            //worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            //worker.WorkerReportsProgress = true;
+            //worker.DoWork += Worker_DoWork;
+            //worker.ProgressChanged += Worker_ProgressChanged;
+            //worker.RunWorkerAsync();
         }
+
+        //private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        //{
+        //    copyProgressBar.Value = e.ProgressPercentage;
+        //    numberProgressBar.Text = (string)e.UserState;
+
+        //}
+
+        //private void Worker_DoWork(object? sender, DoWorkEventArgs e)
+        //{
+        //    var worker = sender as BackgroundWorker;
+        //    worker.ReportProgress(0, )
+        //}
+
+        //private void Worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -14,12 +14,13 @@ namespace EasySave.View_Model
         {
         }
 
-        public void GetCreateModel(string backupName, string sourceDirectory, string targetDirectory, string backupType)
+        public void GetCreateModel(Config config)
         {
             try
             {
+                
                 CreateModel createModel = new CreateModel();
-                var message = createModel.CreateSave(backupName, sourceDirectory, targetDirectory, backupType);
+                var message = createModel.CreateSave(config);
             }
             catch (Exception ex)
             {
