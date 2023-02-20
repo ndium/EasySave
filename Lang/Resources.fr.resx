@@ -177,6 +177,9 @@
   <data name="ThirdOption" xml:space="preserve">
     <value>[3]. Modifier une sauvegarde</value>
   </data>
+  <data name="title" xml:space="preserve">
+    <value />
+  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Bienvenue !</value>
   </data>

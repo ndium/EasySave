@@ -15,9 +15,9 @@ namespace EasySave.View
         public ChangeLangView() { } 
         public void Show()
         {
-            LangHelper langHelper = new LangHelper();
-            Console.Write($"{ langHelper._rm.GetString("LangSelectorTitle")}\n");
-            langHelper.ChangeLanguage(Console.ReadLine());
+            //LangHelper langHelper = new LangHelper();
+            //Console.Write($"{ langHelper._rm.GetString("LangSelectorTitle")}\n");
+            //langHelper.ChangeLanguage(Console.ReadLine());
             SaveView saveView= new SaveView();
             saveView.Welcome();
         }

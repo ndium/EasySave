@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EasySaveV2.View_Model;
 
 namespace EasySaveV2.View
 {
@@ -20,20 +21,22 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LanguageView : Page
     {
+        public LanguageViewModel _languageViewModel { get; set; }
         public LanguageView()
         {
             InitializeComponent();
             DataContext = this;
+            _languageViewModel = new LanguageViewModel();
         }
 
         public void ChangeLanguageFrench(object sender, RoutedEventArgs e)
         {
-
+            _languageViewModel.ChangeLanguageFrench();
         }
 
         public void ChangeLanguageEnglish(object sender, RoutedEventArgs e)
         {
-
+            _languageViewModel.ChangeLanguageEnglish();
         }
     }
 }

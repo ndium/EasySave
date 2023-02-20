@@ -24,9 +24,17 @@ public class LangHelper
         return _rm.GetString(name);
     }
 
-    public void ChangeLanguage(string language)
+    public void ChangeLanguageFrench()
     {
-        var cultureInfo = new CultureInfo(language);
+        var cultureInfo = new CultureInfo("fr");
+
+        CultureInfo.CurrentCulture = cultureInfo;
+        CultureInfo.CurrentUICulture = cultureInfo;
+    }
+
+    public void ChangeLanguageEnglish()
+    {
+        var cultureInfo = new CultureInfo("en");
 
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;

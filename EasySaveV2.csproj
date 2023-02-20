@@ -82,4 +82,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Lang\Lang.en.resx">
+      <CustomToolNamespace>EasySave.Lang</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

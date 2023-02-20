@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySaveV2"
+        xmlns:language="clr-namespace:EasySaveV2.Lang"
         mc:Ignorable="d"
         Title="EasySave" 
         WindowStyle="None"
@@ -15,7 +16,7 @@
 
     <Grid Background="#14213D">
 
-        <TextBlock Text="E A S Y S A V E"
+        <Label Content="E A S Y S A V E"
                    Foreground="#E5E5E5"
                    FontFamily="{StaticResource Roboto}"
                    FontSize="10"
@@ -68,10 +69,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-
-                        <TextBlock Text="My Saves" VerticalAlignment="Center" Margin="10,0,0,0"  />
-
-
+                        <Label Content="{x:Static language:}" VerticalAlignment="Center" Margin="10,0,0,0"  />
                     </MenuItem.Header>
 
 
