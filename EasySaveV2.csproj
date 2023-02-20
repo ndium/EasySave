@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -10,8 +10,10 @@
   <ItemGroup>
     <None Remove="Assets\Logos\data-encryption.png" />
     <None Remove="Assets\Logos\dossier.png" />
+    <None Remove="Assets\Logos\english_flag.png" />
     <None Remove="Assets\Logos\file.png" />
     <None Remove="Assets\Logos\filter.png" />
+    <None Remove="Assets\Logos\french_flag.png" />
     <None Remove="Assets\Logos\folder.png" />
     <None Remove="Assets\Logos\log-file.png" />
     <None Remove="Assets\Logos\log.png" />
@@ -36,13 +38,13 @@
     <Resource Include="Assets\Logos\dossier.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Logos\english_flag.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Logos\file.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logos\filter.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Logos\folder.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logos\log.png">

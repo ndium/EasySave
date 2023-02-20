@@ -28,6 +28,13 @@ namespace EasySaveV2.Model
         public List<Extension> GetList()
         {
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\extension.json";
+            if (!File.Exists(filePath))
+            {
+                using (StreamWriter sw = File.CreateText(filePath))
+                {
+                    sw.Write("[]");
+                }
+            }
             string json = File.ReadAllText(filePath);
             _listExtension = JsonConvert.DeserializeObject<List<Extension>>(json);
             return _listExtension;

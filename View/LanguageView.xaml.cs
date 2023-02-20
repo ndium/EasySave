@@ -23,6 +23,7 @@ namespace EasySaveV2.View
         public LanguageView()
         {
             InitializeComponent();
+            DataContext = this;
         }
     }
 }

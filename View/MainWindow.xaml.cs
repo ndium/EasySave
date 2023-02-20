@@ -82,7 +82,7 @@ namespace EasySaveV2
 
         private void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
-
+            MySaves.Content = new LanguageView();
         }
     }
 }
