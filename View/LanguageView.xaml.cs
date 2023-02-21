@@ -22,13 +22,15 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LanguageView : Page
     {
-        public LanguageView()
+        private MainWindow _mainWindow { get; set; }
+        public LanguageView(MainWindow mainWindow)
         {
+            _mainWindow = mainWindow;
             InitializeComponent();
             DataContext = this;
             Translation();
         }
-        
+
 
         public void Translation()
         {
@@ -42,9 +44,7 @@ namespace EasySaveV2.View
             LangViewModel langViewModel = new LangViewModel();
             langViewModel.ChangeLanguageVM("en");
 
-            MainWindow mainWindow= new MainWindow();
-            mainWindow.Translation();
-            mainWindow.Show();
+            _mainWindow.Translation();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -52,9 +52,7 @@ namespace EasySaveV2.View
             LangViewModel langViewModel = new LangViewModel();
             langViewModel.ChangeLanguageVM("fr");
 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Translation();
-            mainWindow.Show();
+            _mainWindow.Translation();
         }
     }
 }

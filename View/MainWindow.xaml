@@ -31,7 +31,8 @@
 
             <Grid Height="Auto"
                   VerticalAlignment="Top"
-                  Margin="0,30,0,0">
+                  Margin="0,30,0,0"
+                  x:Name="mainGrid">
 
                 <Border Background="#FCA311"
                         Height="25"
@@ -69,7 +70,7 @@
 
                     <MenuItem.Header>
 
-                        <TextBlock Name="Mysaves" VerticalAlignment="Center" Margin="10,0,0,0"  />
+                        <TextBlock Name="Mysaves" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=MySaves}"></TextBlock>
 
 
                     </MenuItem.Header>
@@ -86,7 +87,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Name="Logs" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Logs" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=logs}"></TextBlock>
                     </MenuItem.Header>
 
 
@@ -100,7 +101,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Name="Encryption" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Encryption" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=Encryption}"></TextBlock>
                     </MenuItem.Header>
 
 
@@ -114,7 +115,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Name="Filters" Margin="10,0,0,0" />
+                        <TextBlock Name="Filters" Margin="10,0,0,0" Text="{Binding Path=Filters}"></TextBlock>
                     </MenuItem.Header>
 
 
@@ -128,7 +129,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Name="Language" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Language" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=Language}"></TextBlock>
                     </MenuItem.Header>
 
 
@@ -143,7 +144,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Name="Exit" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Exit" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=Exit}"></TextBlock>
                     </MenuItem.Header>
 
 
