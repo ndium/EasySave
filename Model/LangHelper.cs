@@ -26,7 +26,7 @@ public class LangHelper
 
     public void ChangeLanguage(string language)
     {
-        var cultureInfo = new CultureInfo("en");
+        var cultureInfo = new CultureInfo(language);
 
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;

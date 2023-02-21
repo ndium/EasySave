@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EasySaveV2.Model;
+using EasySaveV2.View_Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,16 +26,35 @@ namespace EasySaveV2.View
         {
             InitializeComponent();
             DataContext = this;
+            Translation();
+        }
+        
+
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            EnglishButton.Content = $"{langHelper._rm.GetString("ChangeButton")}";
+            FrenchButton.Content = $"{langHelper._rm.GetString("ChangeButton")}";
+
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LangViewModel langViewModel = new LangViewModel();
+            langViewModel.ChangeLanguageVM("en");
+
+            MainWindow mainWindow= new MainWindow();
+            mainWindow.Translation();
+            mainWindow.Show();
         }
 
-        public void ChangeLanguageFrench(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            LangViewModel langViewModel = new LangViewModel();
+            langViewModel.ChangeLanguageVM("fr");
 
-        }
-
-        public void ChangeLanguageEnglish(object sender, RoutedEventArgs e)
-        {
-
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Translation();
+            mainWindow.Show();
         }
     }
 }

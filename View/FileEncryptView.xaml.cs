@@ -30,6 +30,14 @@ namespace EasySaveV2.View
             DataContext = this;
             _fileEncryptViewModel = new FileEncryptViewModel();
             refresh();
+            Translation();
+        }
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            Extension.Text = $"{langHelper._rm.GetString("Extension")}";
+            AddExtension.Content = $"{langHelper._rm.GetString("AddButton")}";
+            DeleteExtension.Content = $"{langHelper._rm.GetString("DeleteButton")}";
         }
 
         //Button ajouter

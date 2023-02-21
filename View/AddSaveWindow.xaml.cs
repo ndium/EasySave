@@ -28,6 +28,16 @@ namespace EasySaveV2.View
 
         }
 
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            Name.Text = $"{langHelper._rm.GetString("Name")}";
+            SourcePath.Text = $"{langHelper._rm.GetString("sourceDirectory")}";
+            DestinationPath.Text = $"{langHelper._rm.GetString("targetDirectory")}";
+            backuptype.Text = $"{langHelper._rm.GetString("backuptype")}";
+            SaveButton.Content = $"{langHelper._rm.GetString("SaveAppButton")}";
+        }
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             Config config = new Config();

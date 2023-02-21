@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Newtonsoft.Json;
+using EasySaveV2.Model;
 
 
 namespace EasySaveV2
@@ -27,6 +28,18 @@ namespace EasySaveV2
         public MainWindow()
         {
             InitializeComponent();
+            Translation();
+        }
+
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            Mysaves.Text = $"{langHelper._rm.GetString("FirstOption")}";
+            Logs.Text = $"{langHelper._rm.GetString("SecondOption")}";
+            Encryption.Text = $"{langHelper._rm.GetString("ThirdOption")}";
+            Filters.Text = $"{langHelper._rm.GetString("FourthOption")}";
+            Language.Text = $"{langHelper._rm.GetString("FifthOption")}";
+            Exit.Text = $"{langHelper._rm.GetString("SixthOption")}";
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

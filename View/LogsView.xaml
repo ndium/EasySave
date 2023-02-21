@@ -16,10 +16,10 @@
 
             <ItemsControl x:Name="SaveGrid" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" Margin="10">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Select file format:" />
+                    <TextBlock Name ="SelectFile" />
                     <RadioButton Name="xmlRadio" Content="XML" IsChecked="True" />
                     <RadioButton Name="jsonRadio" Content="JSON" />
-                    <Button Content="Convert" Click="ConvertButton_Click" />
+                    <Button Name="Convert" Click="ConvertButton_Click" />
                 </StackPanel>
 
             </ItemsControl>

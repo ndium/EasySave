@@ -40,22 +40,22 @@
             </DockPanel.Resources>
 
             <DockPanel  DockPanel.Dock="Top" >
-                <TextBlock Text="Nom de sauvegarde : " Margin="0,0,12,0"/>
+                <TextBlock Name= "Name" Margin="0,0,12,0"/>
                 <TextBox x:Name="SaveName" />
             </DockPanel>
 
             <DockPanel  DockPanel.Dock="Top">
-                <TextBlock Text="Chemin source : " Margin="0,0,40,0"/>
+                <TextBlock Name= "SourcePath" Margin="0,0,40,0"/>
                 <TextBox x:Name="Source"/>
             </DockPanel>
 
             <DockPanel  DockPanel.Dock="Top">
-                <TextBlock Text="Chemin de destination : "/>
+                <TextBlock Name="DestinationPath"/>
                 <TextBox x:Name="Destination"/>
             </DockPanel>
 
             <DockPanel  DockPanel.Dock="Top" VerticalAlignment="Top">
-                <TextBlock Text="Type de sauvegarde   : "/>
+                <TextBlock Name="backuptype"/>
                 <ComboBox x:Name="SaveType" ItemsSource="{Binding Source={StaticResource saveTypeFromEnum}}" 
                           BorderThickness="0.1">
                     <ComboBox.Resources>
@@ -66,7 +66,7 @@
                 </ComboBox>
 
             </DockPanel>
-            <Button Content="Enregistrer" x:Name="SaveButton" Click="SaveButton_Click"/>
+            <Button x:Name="SaveButton" Click="SaveButton_Click"/>
         </DockPanel>
     </Grid>
 </Window>

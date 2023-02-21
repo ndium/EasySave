@@ -69,7 +69,7 @@
 
                     <MenuItem.Header>
 
-                        <TextBlock Text="My Saves" VerticalAlignment="Center" Margin="10,0,0,0"  />
+                        <TextBlock Name="Mysaves" VerticalAlignment="Center" Margin="10,0,0,0"  />
 
 
                     </MenuItem.Header>
@@ -86,7 +86,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="Logs" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Logs" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </MenuItem.Header>
 
 
@@ -100,7 +100,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="File Encryption" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Encryption" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </MenuItem.Header>
 
 
@@ -114,7 +114,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="Filters" Margin="10,0,0,0" />
+                        <TextBlock Name="Filters" Margin="10,0,0,0" />
                     </MenuItem.Header>
 
 
@@ -128,7 +128,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="Change Language" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Language" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </MenuItem.Header>
 
 
@@ -143,7 +143,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem.Header>
-                        <TextBlock Text="Exit" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Name="Exit" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </MenuItem.Header>
 
 
