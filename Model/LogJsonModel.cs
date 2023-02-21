@@ -40,7 +40,7 @@ namespace EasySaveV2.Model
             var filePath = Path.Combine(path, "config.json");
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(path);
             }
 
             if (!File.Exists(filePath))

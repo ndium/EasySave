@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Newtonsoft.Json;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace EasySaveV2.Model
 {
@@ -86,21 +87,61 @@ namespace EasySaveV2.Model
                     logJsonModel.SaveLog(fileSize, timeElapsed, config);
 
                 }
-
                 else
                 {
+                    try
+                    {
+                        
+                        DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
+                        long totalSize = await GetDirectorySize(sourceFolderInfo);
+                        long totalBytes = 0;
 
-                    var sourceFolderInfo = new DirectoryInfo(sourceFile);
-                    long totalSize = await GetDirectorySize(sourceFolderInfo);
-                    long totalBytes = 0;
-                    await CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
-                    watch.Stop();
-                    double timeElapsed = watch.Elapsed.TotalSeconds;
-                    var logJsonModel = new LogJsonModel();
-                    logJsonModel.SaveLog(totalSize, timeElapsed, config);
+                        await CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+
+                        /*foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
+                        {
+                            var source = fileInfo.FullName;
+                            var target = Path.Combine(targetFile, fileInfo.Name);
+                            await EncryptionFile( source, target);
+                        }
+
+                        foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
+                        {
+                            string newDestinationDir = Path.Combine(targetFile, subDir.Name);
+                            await EncryptionFile(sourceFile, newDestinationDir);
+                        }*/
+
+                        EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
+
+                        watch.Stop();
+                        double timeElapsed = watch.Elapsed.TotalSeconds;
+                        LogJsonModel logJsonModel = new LogJsonModel();
+                        logJsonModel.SaveLog(totalSize, timeElapsed, config);
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
                 }
 
 
+            }
+
+            async Task EncryptionRecursiveFile(DirectoryInfo sourceFolderInfo,string sourceFile, string targetFile)
+            {
+                foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
+                {
+                    var source = fileInfo.FullName;
+                    var target = Path.Combine(targetFile, fileInfo.Name);
+                    await EncryptionFile(source, target);
+                }
+
+                foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
+                {
+                    string newDestinationDir = Path.Combine(targetFile, subDir.Name);
+                    string newSource = Path.Combine(sourceFile, subDir.Name);
+                    await EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
+                }
             }
 
             async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
@@ -228,6 +269,26 @@ namespace EasySaveV2.Model
                 }
             }
             return canSave;
+        }
+
+        //Méthode qui gère le chiffrement de fichier un à un
+        public async Task EncryptionFile(string source, string destination)
+        {
+            FileEncryptModel fileEncryptModel = new FileEncryptModel();
+
+            foreach (Extension extension in fileEncryptModel.GetList())
+            {
+                if (extension.Name == Path.GetExtension(source))
+                {
+                    Process processCryptosoft = new Process();
+                    processCryptosoft.StartInfo.FileName = @"Model\CryptoSoft.exe";
+                    //processCryptosoft.StartInfo.Arguments = source + " " + destination;
+                    processCryptosoft.StartInfo.ArgumentList.Add(source);
+                    processCryptosoft.StartInfo.ArgumentList.Add(destination);
+                    processCryptosoft.Start();
+                }
+            }
+            
         }
     }
 }

@@ -25,6 +25,9 @@
     <None Remove="Fonts\Orbitron-Medium.ttf" />
     <None Remove="Fonts\Roboto.ttf" />
     <None Remove="Fonts\SassyFrass.ttf" />
+    <None Remove="Model\Appconfig.xml" />
+    <None Remove="Model\CryptoSoft.exe" />
+    <None Remove="Model\CryptoSoft.pdb" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,6 +82,15 @@
     </Content>
     <Content Include="Fonts\SassyFrass.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Model\Appconfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Model\CryptoSoft.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Model\CryptoSoft.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
