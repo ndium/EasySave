@@ -9,7 +9,10 @@
       Title="LanguageView">
 
     <Grid Background="#14213D">
-        <Image Source="../Assets/Logos/english_flag.png" Margin="203,315,454,315" MouseLeftButtonDown="ChangeLanguageEnglish"/>
-        <Image Source="../Assets/Logos/french_flag.png" Width="100" Height="60" Margin="451,320,219,320" MouseLeftButtonDown="ChangeLanguageFrench"/>
+        <Image Source="../Assets/Logos/english_flag.png" Margin="203,315,454,315"/>
+        <Image Source="../Assets/Logos/french_flag.png" Width="100" Height="60" Margin="469,320,201,320"/>
+        <Button Name="EnglishButton" HorizontalAlignment="Left" Margin="190,409,0,0" VerticalAlignment="Top" Height="35" Click="Button_Click"/>
+        <Button Name="FrenchButton" HorizontalAlignment="Left" Margin="451,409,0,0" VerticalAlignment="Top" Height="35" Click="Button_Click_1"/>
+
     </Grid>
 </Page>

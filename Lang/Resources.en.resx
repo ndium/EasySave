@@ -118,34 +118,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddApp" xml:space="preserve">
-    <value>test2en</value>
+    <value>Appliction's name</value>
+  </data>
+  <data name="AddButton" xml:space="preserve">
+    <value>Add</value>
   </data>
   <data name="AppList" xml:space="preserve">
-    <value>TestEn</value>
+    <value>App's List</value>
   </data>
   <data name="backuptype" xml:space="preserve">
     <value>Enter a backupType</value>
   </data>
+  <data name="ChangeButton" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Which save do you want to delete ?</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Editbutton" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="Error Daily Logs" xml:space="preserve">
     <value>An error occurred while recording the daily log:</value>
   </data>
+  <data name="ErrorApp" xml:space="preserve">
+    <value>Save's Error</value>
+  </data>
   <data name="existingValue" xml:space="preserve">
     <value>Enter an existing value</value>
   </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Enter extension</value>
+  </data>
   <data name="FifthOption" xml:space="preserve">
-    <value>[5]. Execute Save</value>
+    <value>Language</value>
   </data>
   <data name="FirstOption" xml:space="preserve">
-    <value>[1]. Change Language</value>
+    <value>My Saves</value>
   </data>
   <data name="FourthOption" xml:space="preserve">
-    <value>[4]. Delete Save</value>
+    <value>Filters</value>
   </data>
   <data name="LangSelectorTitle" xml:space="preserve">
     <value>Choose a language</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Launch</value>
   </data>
   <data name="MaxConf" xml:space="preserve">
     <value>The maximum threshold has been reached, please delete one of the backup jobs</value>
@@ -159,17 +183,29 @@
   <data name="NotFound" xml:space="preserve">
     <value>The configuration was not found</value>
   </data>
+  <data name="SaveApp" xml:space="preserve">
+    <value>Application Save with success</value>
+  </data>
+  <data name="SaveAppButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="SaveCreated" xml:space="preserve">
     <value>The backup work is created!</value>
   </data>
   <data name="SecondOption" xml:space="preserve">
-    <value>[2]. Create Save</value>
+    <value>Logs</value>
   </data>
   <data name="selectCopy" xml:space="preserve">
     <value>Select the file or folder to copy</value>
   </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Select file to convert</value>
+  </data>
   <data name="SelectOption" xml:space="preserve">
     <value>Enter an option :</value>
+  </data>
+  <data name="SixthOption" xml:space="preserve">
+    <value>Exit</value>
   </data>
   <data name="sourceDirectory" xml:space="preserve">
     <value>Enter a Source path</value>
@@ -181,7 +217,7 @@
     <value>Enter a target path</value>
   </data>
   <data name="ThirdOption" xml:space="preserve">
-    <value>[3]. Edit Save</value>
+    <value>Encryption</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome !</value>

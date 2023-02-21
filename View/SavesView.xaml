@@ -32,13 +32,13 @@
             </ListBox.ItemsPanel>
         </ListBox>
         <StackPanel Margin="590,40,0,80" HorizontalAlignment="Left">
-            <Button Content="Ajouter sauvegarde" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_1"/>
+            <Button Name="AddButton" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_1"/>
 
-            <Button Content="Modifier sauvegarde" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_2"/>
-            <Button Content="Supprimer sélection" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_3"/>
+            <Button Name="EditButton" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_2"/>
+            <Button Name="DeleteButton" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click_3"/>
         </StackPanel>
         <StackPanel Margin="570,620,0,0" HorizontalAlignment="Center">
-            <Button Content="Lancer sélection" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click"/>
+            <Button Name="launchButton" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click"/>
 
         </StackPanel>
 

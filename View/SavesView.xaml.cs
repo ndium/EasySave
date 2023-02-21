@@ -34,6 +34,16 @@ namespace EasySaveV2.View
             _copyViewModel = new CopyViewModel();
             List<Config> list = _copyViewModel.GetConfigs();
             SaveGrid.ItemsSource = list;
+            Translation();
+        }
+
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            AddButton.Content = $"{langHelper._rm.GetString("AddButton")}";
+            EditButton.Content = $"{langHelper._rm.GetString("Editbutton")}";
+            DeleteButton.Content = $"{langHelper._rm.GetString("DeleteButton")}";
+            launchButton.Content = $"{langHelper._rm.GetString("Launch")}";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

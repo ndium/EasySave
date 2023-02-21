@@ -32,6 +32,7 @@ namespace EasySaveV2.View
         public LogsView()
         {
             InitializeComponent();
+            Translation();
 
             var logs = new LogViewModel();
             /*List<Config> list = LogJson.log
@@ -51,6 +52,12 @@ namespace EasySaveV2.View
 
 
 
+        }
+        public void Translation()
+        {
+            LangHelper langHelper = new LangHelper();
+            SelectFile.Text = $"{langHelper._rm.GetString("SelectFile")}";
+            Convert.Content = $"{langHelper._rm.GetString("Convert")}";
         }
 
 

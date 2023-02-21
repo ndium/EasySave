@@ -33,6 +33,7 @@ namespace EasySaveV2.View
             DataContext = this;
             _filtersViewModel = new FiltersViewModel();
             Refresh();
+            Translation();
         }
 
         public void Translation()
@@ -40,23 +41,26 @@ namespace EasySaveV2.View
             LangHelper langHelper = new LangHelper();
             AppList.Text = $"{langHelper._rm.GetString("AppList")}";
             AddApp.Text = $"{langHelper._rm.GetString("AddApp")}";
+            SaveFilters_Click.Content = $"{langHelper._rm.GetString("SaveAppButton")}";
         }
 
         private void OnSaveApp(object sender, RoutedEventArgs e)
         {
+            LangHelper langHelper = new LangHelper();
             string AppName = txtAppName.Text;
             try
             {
                 if (_filtersViewModel.AppExists(AppName))
                 {
-                    MessageBox.Show("L'application existe déjà.");
+                    MessageBox.Show($"{langHelper._rm.GetString("ErrorApp")}");
                 }
                 _filtersViewModel.SaveApp(AppName);
-                MessageBox.Show("Application sauvegardée avec succès.");
+                MessageBox.Show($"{langHelper._rm.GetString("SaveApp")}");
             }
             catch (Exception)
             {
-                MessageBox.Show("Erreur lors de la sauvegarde de l'application : " + AppName);
+
+                MessageBox.Show($"{langHelper._rm.GetString("ErrorApp")}" + AppName);
             }
             Refresh();
         }
