@@ -84,10 +84,10 @@ namespace EasySaveV2.Model
                     {
                         
                         DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
-                        long totalSize = await GetDirectorySize(sourceFolderInfo);
+                        long totalSize = GetDirectorySize(sourceFolderInfo);
                         long totalBytes = 0;
 
-                        await CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+                         CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
 
                         /*foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
                         {
