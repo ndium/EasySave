@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
+using System.Windows;
 
 namespace EasySaveV2.Model
 {
@@ -30,7 +31,10 @@ namespace EasySaveV2.Model
             localWorker.ReportProgress(0, string.Format("0"));
             // Effectuer la sauvegarde si possible
             if (!CheckBusinessApp())
+            { 
                 throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                
+            }
 
 
             string sourceFile = config.SourceDirectory;
@@ -254,7 +258,7 @@ namespace EasySaveV2.Model
             }
             else
             {
-                Console.WriteLine("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
             }
         }
 
@@ -269,16 +273,15 @@ namespace EasySaveV2.Model
                 return true;
             }
             string json = File.ReadAllText(file);
-            var applications = JsonConvert.DeserializeObject<string[]>(json);
+            List<BusinessApp> applications = JsonConvert.DeserializeObject<List<BusinessApp>>(json);
 
             // Vérifier si les applications sont ouvertes
             bool canSave = true;
-            foreach (string application in applications)
+            foreach (var application in applications)
             {
-                Process[] processList = Process.GetProcessesByName(application);
+                Process[] processList = Process.GetProcessesByName(application.AppName);
                 if (processList.Length > 0)
                 {
-                    Console.WriteLine("L'application " + application + " est en cours d'exécution et bloque la sauvegarde");
                     canSave = false;
                     break;
                 }

@@ -33,21 +33,20 @@ namespace EasySaveV2.View_Model
 
         public void GetCopyModel(List<Config> selectedWorks, object sender)
         {
-
-
-            foreach (var config in selectedWorks)
-            {
-
-
-                if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
+            
+                foreach (var config in selectedWorks)
                 {
-                    _copyModel.FullCopy(config, sender);
+
+
+                    if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
+                    {
+                        _copyModel.FullCopy(config, sender);
+                    }
+                    else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
+                    {
+                        _copyModel.DifferentialCopy(config, sender);
+                    }
                 }
-                else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
-                {
-                    _copyModel.DifferentialCopy(config, sender);
-                }
-            }
         }
 
 
