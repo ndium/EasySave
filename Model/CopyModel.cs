@@ -10,33 +10,23 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Newtonsoft.Json;
 using System.ComponentModel;
+using System.Threading;
 
 namespace EasySaveV2.Model
 {
     public class CopyModel
     {
-        public event EventHandler<int>? ProgressChanged;
 
         private int _progress { get; set; }
-        public int Progress
-        {
-           
-            get { return _progress; }
-            set
-            {
-                if (_progress != value)
-                {
-                    _progress = value;
-                    ProgressChanged?.Invoke(this, Progress);
-                }
-            }
-        }
+       
         
 
 
 
-        public async Task FullCopy(Config config)
+        public void FullCopy(Config config, object sender)
         {
+            var localWorker = sender as BackgroundWorker;
+            localWorker.ReportProgress(0, string.Format("0"));
             // Effectuer la sauvegarde si possible
             if (!CheckBusinessApp())
                 throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
@@ -77,6 +67,7 @@ namespace EasySaveV2.Model
 
                                 // Calcul de la progression
                                 _progress = (int)((totalBytes / (double)fileSize) * 100);
+                                localWorker.ReportProgress(_progress, string.Format($"{_progress}%"));
                             }
                         }
                     }
@@ -91,9 +82,9 @@ namespace EasySaveV2.Model
                 {
 
                     var sourceFolderInfo = new DirectoryInfo(sourceFile);
-                    long totalSize = await GetDirectorySize(sourceFolderInfo);
+                    long totalSize =  GetDirectorySize(sourceFolderInfo);
                     long totalBytes = 0;
-                    await CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+                     CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
                     var logJsonModel = new LogJsonModel();
@@ -103,8 +94,10 @@ namespace EasySaveV2.Model
 
             }
 
-            async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
+             void CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
             {
+                var localWorker = sender as BackgroundWorker;
+                localWorker.ReportProgress(0, string.Format("0"));
                 if (!CheckBusinessApp())
                 {
                     throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
@@ -136,7 +129,7 @@ namespace EasySaveV2.Model
 
                                 // Calcul de la progression
                                 _progress = (int)((totalBytes / (double)totalSize) * 100);
-
+                                localWorker.ReportProgress(_progress, string.Format($"{_progress}%"));
                             }
 
                         }
@@ -149,11 +142,11 @@ namespace EasySaveV2.Model
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
-                    await CopyDirectory(subDir, newDestinationDir, totalSize, totalBytes);
+                    CopyDirectory(subDir, newDestinationDir, totalSize, totalBytes);
                 }
             }
         }
-        private static async Task<long> GetDirectorySize(DirectoryInfo directoryInfo)
+        private static long GetDirectorySize(DirectoryInfo directoryInfo)
         {
             long size = 0;
 
@@ -166,17 +159,19 @@ namespace EasySaveV2.Model
             // Récuperation de la taille des sous-dossiers récursivement
             foreach (var subDirectoryInfo in directoryInfo.GetDirectories())
             {
-                size += await GetDirectorySize(subDirectoryInfo);
+                size += GetDirectorySize(subDirectoryInfo);
             }
 
             return size;
         }
-        public async Task DifferentialCopy(Config config)
+        public async Task DifferentialCopy(Config config,  object sender)
         {
             if (CheckBusinessApp())
             {
                 string sourceFolder = config.SourceDirectory;
                 string targetFolder = config.TargetDirectory;
+                var sourceFolderInfo = new DirectoryInfo(sourceFolder);
+                long totalSize =  GetDirectorySize(sourceFolderInfo);
                 foreach (var fileInfo in new DirectoryInfo(sourceFolder).GetFiles())
                 {
                     var sourceFile = fileInfo.FullName;
@@ -193,7 +188,27 @@ namespace EasySaveV2.Model
                         }
                     }
 
-                    File.Copy(sourceFile, targetFile, true);
+                    using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
+                    {
+                        using (var target = new FileStream(targetFile, FileMode.Create, FileAccess.Write))
+                        {
+                            var buffer = new byte[4096];
+                            int bytesRead;
+                            int totalBytes = 0;
+
+
+                            while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                target.Write(buffer, 0, bytesRead);
+                                totalBytes += bytesRead;
+
+                                // Calcul de la progression
+                                _progress = (int)((totalBytes / (double)totalSize) * 100);
+
+                            }
+
+                        }
+                    }
                 }
             }
             else

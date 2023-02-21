@@ -26,7 +26,7 @@ namespace EasySaveV2.View
         public LoadingBar()
         {
             InitializeComponent();
-            DataContext = new CopyViewModel();
+            DataContext = this;
             //BackgroundWorker worker = new BackgroundWorker();
             //worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
             //worker.WorkerReportsProgress = true;
