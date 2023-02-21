@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace EasySaveV2.View_Model
 {
@@ -20,61 +21,31 @@ namespace EasySaveV2.View_Model
     {
         string LocalPath;
         public CopyModel _copyModel { get; set; }
+
         public CopyViewModel()
         {
-             
             LocalPath = Global.JSON_PATH;
             _copyModel = new CopyModel();
-            _copyModel.ProgressChanged += _copyModel_ProgressChanged;
-        }
-        static double Progress { get; set; }
-
-        private void _copyModel_ProgressChanged(object sender, int e)
-        {
-            Progress = e;
-            
-
         }
 
+       
 
-        public async Task GetCopyModel(List<Config> selectedWorks)
+
+        public void GetCopyModel(List<Config> selectedWorks, object sender)
         {
-            var i = 0;
-
-            LoadingBar progressBar = new LoadingBar();
-            progressBar.Show();
-            if (progressBar.Dispatcher.CheckAccess())
-            {
-                progressBar.copyProgressBar.Value = Progress;
-            }
-            else
-            {
-                await progressBar.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    progressBar.copyProgressBar.Value = Progress;
-                }));
-            }
-
-
-
-
-
-
-
 
 
             foreach (var config in selectedWorks)
             {
-                i++;
 
 
                 if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
                 {
-                    await _copyModel.FullCopy(config);
+                    _copyModel.FullCopy(config, sender);
                 }
                 else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
                 {
-                    await _copyModel.DifferentialCopy(config);
+                    _copyModel.DifferentialCopy(config, sender);
                 }
             }
         }

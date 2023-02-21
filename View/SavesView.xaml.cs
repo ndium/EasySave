@@ -26,7 +26,10 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class SavesView : Page
     {
+        public BackgroundWorker worker { get; set; }
         public CopyViewModel _copyViewModel { get; set; }
+        private List<Config> selectedConfigs { get; set; }
+        private LoadingBar loadingBar { get; set; }
         public SavesView()
         {
             InitializeComponent();
@@ -48,7 +51,14 @@ namespace EasySaveV2.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            List<Config> selectedConfigs = new List<Config>();
+            worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            worker.WorkerReportsProgress= true;
+            worker.DoWork += Worker_DoWork;
+            worker.ProgressChanged += Worker_ProgressChanged;
+            worker.RunWorkerAsync();
+            
+            selectedConfigs = new List<Config>();
             
             foreach(var item in SaveGrid.SelectedItems)
             {
@@ -57,11 +67,41 @@ namespace EasySaveV2.View
                     selectedConfigs.Add(config);
                 }
             }
-            
-            _copyViewModel.GetCopyModel(selectedConfigs);
+            loadingBar = new LoadingBar();
+            loadingBar.Show();
 
 
 
+
+        }
+
+        private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            loadingBar.copyProgressBar.Value = e.ProgressPercentage;
+            loadingBar.numberProgressBar.Text = (string)e.UserState;
+        }
+
+        private void Worker_DoWork(object? sender, DoWorkEventArgs e)
+        {
+            _copyViewModel.GetCopyModel(selectedConfigs, worker);
+        }
+
+        private void Worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else if (e.Cancelled)
+            {
+                MessageBox.Show("L'opération a été annulée.");
+            }
+            else
+            {
+                loadingBar.copyProgressBar.Value = 100;
+                MessageBox.Show("L'opération est terminée.");
+                loadingBar.Close();
+            }
 
         }
 
