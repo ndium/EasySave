@@ -16,21 +16,103 @@ using System.Windows.Shapes;
 using System.IO;
 using Newtonsoft.Json;
 using EasySaveV2.Model;
-
+using System.Threading;
+using System.Diagnostics.Metrics;
+using System.ComponentModel;
 
 namespace EasySaveV2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private Mutex mutex;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string mySavesMenu;
+        public string MySavesMenu
+        {
+            get { return mySavesMenu; }
+            set
+            {
+                mySavesMenu = value;
+                RaisePropertyChanged("MySaves");
+            }
+        }
+        private string logsMenu;
+        public string LogsMenu
+        {
+            get { return logsMenu; }
+            set
+            {
+                logsMenu = value;
+                RaisePropertyChanged("Logs");
+            }
+        }
+        private string encryptionMenu;
+        public string EncryptionMenu
+        {
+            get { return encryptionMenu; }
+            set
+            {
+                encryptionMenu = value;
+                RaisePropertyChanged("Encryption");
+            }
+        }
+        private string filtersMenu;
+        public string FilterssMenu
+        {
+            get { return filtersMenu; }
+            set
+            {
+                filtersMenu = value;
+                RaisePropertyChanged("Filters");
+            }
+        }
+        private string languageMenu;
+        public string LanguageMenu
+        {
+            get { return languageMenu; }
+            set
+            {
+                languageMenu = value;
+                RaisePropertyChanged("Language");
+            }
+        }
+        private string exitMenu;
+        public string ExitMenu
+        {
+            get { return exitMenu; }
+            set
+            {
+                exitMenu = value;
+                RaisePropertyChanged("Exit");
+            }
+        }
+
+
         public MainWindow()
         {
             InitializeComponent();
             Translation();
-        }
 
+            bool createdNew;
+            mutex = new Mutex(true, "NomUniqueDeVotreMutex", out createdNew);
+
+            if (!createdNew)
+            {
+                // une instance de l'application est déjà en cours d'exécution
+                // vous pouvez par exemple afficher un message d'erreur et fermer l'application
+                MessageBox.Show("L'application est déjà en cours d'exécution.");
+                Application.Current.Shutdown();
+            }
+        }
+        private void RaisePropertyChanged(string propName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
         public void Translation()
         {
             LangHelper langHelper = new LangHelper();
@@ -79,7 +161,7 @@ namespace EasySaveV2
 
         private void MySaves_Navigated(object sender, NavigationEventArgs e)
         {
-            
+
         }
 
         //bouton parametre chiffrement
@@ -95,7 +177,11 @@ namespace EasySaveV2
 
         private void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
-            MySaves.Content = new LanguageView();
+            MySaves.Content = new LanguageView(this);
+        }
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            mutex.ReleaseMutex();
         }
     }
 }

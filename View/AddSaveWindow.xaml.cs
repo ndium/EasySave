@@ -25,16 +25,17 @@ namespace EasySaveV2.View
         {
             InitializeComponent();
             DataContext = this;
+            Translation();
 
         }
 
         public void Translation()
         {
             LangHelper langHelper = new LangHelper();
-            Name.Text = $"{langHelper._rm.GetString("Name")}";
-            SourcePath.Text = $"{langHelper._rm.GetString("sourceDirectory")}";
-            DestinationPath.Text = $"{langHelper._rm.GetString("targetDirectory")}";
-            backuptype.Text = $"{langHelper._rm.GetString("backuptype")}";
+            Name.Text = $"{langHelper._rm.GetString("Name")}\n";
+            SourcePath.Text = $"{langHelper._rm.GetString("sourceDirectory")}\n";
+            DestinationPath.Text = $"{langHelper._rm.GetString("targetDirectory")}\n";
+            backuptype.Text = $"{langHelper._rm.GetString("backuptype")} \n";
             SaveButton.Content = $"{langHelper._rm.GetString("SaveAppButton")}";
         }
 
