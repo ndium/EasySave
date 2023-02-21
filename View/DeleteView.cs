@@ -1,9 +1,9 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.View_Model;
+using EasySaveV2.View_Model;
 using System.Globalization;
 using EasySaveV2.Model;
 
@@ -11,26 +11,25 @@ namespace EasySaveV2.View
 {
     public class DeleteView
     {
-        LangHelper langHelper = new LangHelper();
+        //LangHelper langHelper = new LangHelper();
 
-        public void Show()
-        {
-            var deleteViewModel = new DeleteViewModel();
-            List<string> listConfig;
-            
-            listConfig = deleteViewModel.GetListConfig();
+        //public void Show()
+        //{
+        //    var deleteViewModel = new DeleteViewModel();
+        //    List<string> listConfig;
 
-            foreach (string x in listConfig)
-            {
-                Console.WriteLine(x);
-            }
+        //    listConfig = deleteViewModel.GetListConfig();
 
-            Console.Write($"{langHelper._rm.GetString("Delete", CultureInfo.CurrentUICulture)}\n");
+        //    foreach (string x in listConfig)
+        //    {
+        //        Console.WriteLine(x);
+        //    }
 
-            int numConfig = Int32.Parse(Console.ReadLine());
+        //    Console.Write($"{langHelper._rm.GetString("Delete", CultureInfo.CurrentUICulture)}\n");
 
-            Console.WriteLine(deleteViewModel.SetNumConfigModel(numConfig));
-        }
+        //    int numConfig = Int32.Parse(Console.ReadLine());
+
+        //    //Console.WriteLine(deleteViewModel.GetDeleteModel(numConfig));
+    //}
     }
 }
-*/

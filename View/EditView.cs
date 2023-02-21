@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EasySaveV2.View_Model;
-using EasySaveV2.Model;
 
 namespace EasySaveV2.View
 {
@@ -17,8 +16,8 @@ namespace EasySaveV2.View
 
         public void Show()
         {
-           /* var saveView = new SaveView();
-            saveView.Welcome();*/
+            //var saveView = new SaveView();
+            //saveView.Welcome();
 
             /*while (true)
             {

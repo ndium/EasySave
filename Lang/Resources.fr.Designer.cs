@@ -39,7 +39,7 @@ namespace EasySaveV2.Lang {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.Lang.Fr", typeof(Fr).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySaveV2.Lang.Fr", typeof(Fr).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

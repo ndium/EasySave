@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EasySaveV2.View;
 using NewtonsoftJson = Newtonsoft.Json;
 
-//Import des éléments du namespace EasySave
+//Import des éléments du namespace EasySaveV2
 using EasySaveV2.View_Model;
 using Newtonsoft.Json;
 

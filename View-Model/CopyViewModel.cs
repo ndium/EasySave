@@ -1,5 +1,6 @@
 ﻿using EasySaveV2.Model;
 using EasySaveV2.View;
+using EasySaveV2.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,20 +14,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace EasySaveV2.View_Model
 {
     public class CopyViewModel
     {
-        string _backupConfigFile;
-        string _file;
+        string LocalPath;
         public CopyModel _copyModel { get; set; }
         public CopyViewModel()
         {
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
-            string file = Path.Combine(backupConfigFile, "config.json");
-            _backupConfigFile = backupConfigFile;
-            _file = file;
+             
+            LocalPath = Global.JSON_PATH;
             _copyModel = new CopyModel();
             _copyModel.ProgressChanged += _copyModel_ProgressChanged;
         }
@@ -86,7 +83,7 @@ namespace EasySaveV2.View_Model
         public Config GetConfigInfo(int index)
         {
             var jsonModel = new LogJsonModel();
-            Config obj = jsonModel.ReadJsonConfig(_file, index);
+            Config obj = jsonModel.ReadJsonConfig(LocalPath, index);
             return obj;
 
         }
@@ -94,7 +91,7 @@ namespace EasySaveV2.View_Model
         {
 
             var jsonModel = new LogJsonModel();
-            List<Config> obj = jsonModel.GetConfigFile(_file);
+            List<Config> obj = jsonModel.GetConfigFile(LocalPath);
             return obj;
         }
     }

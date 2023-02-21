@@ -18,14 +18,14 @@ namespace EasySaveV2.Model
 
         }
 
-        public string CreateSave (Config config )
+        public void CreateSave (Config config )
         {
             
                 
                
 
                 var backupConfigs = new List<Config>();
-                string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+                string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
 
                 if (!Directory.Exists(backupConfigFile))
                 {
@@ -40,7 +40,6 @@ namespace EasySaveV2.Model
                 }
                 backupConfigs.Add(config);
                 File.WriteAllText(file, JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));
-                       throw new Exception("SaveCreated");
         }
     }
 }

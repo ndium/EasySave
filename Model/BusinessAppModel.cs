@@ -25,7 +25,7 @@ namespace EasySaveV2.Model
             BusinessApp.AppName = AppName;
 
             var AppConfigs = new List<BusinessApp>();
-            string AppConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string AppConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
 
             if (!Directory.Exists(AppConfigFile))
             {
@@ -43,7 +43,7 @@ namespace EasySaveV2.Model
         }
         public bool AppExists(string appName)
         {
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(appPath, "applications.json");
             if (!File.Exists(file))
             {
@@ -56,7 +56,7 @@ namespace EasySaveV2.Model
 
         public string GetJson()
         {
-            string AppConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string AppConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
 
             if (!Directory.Exists(AppConfigFile))
             {

@@ -11,28 +11,31 @@ namespace EasySaveV2.View_Model
     public class DeleteViewModel
     {
         public DeleteModel deleteModel;
+        public LogJsonModel logJsonModel;
+        private string LocalPath;
         public DeleteViewModel()
         {
+            logJsonModel= new LogJsonModel();
             deleteModel = new DeleteModel();
+            LocalPath = Global.JSON_PATH;
         }
 
-        public List<string> GetListConfig()
+
+        public List<Config> GetListConfig()
         {
-            return deleteModel.GetListConfig();
+            return logJsonModel.GetConfigFile(LocalPath);
         }
 
-        public string SetNumConfigModel(int numConfig)
+        public void GetDeleteModel(List<Config> configs)
         {
             try
             {
-                var message = deleteModel.DeleteSave(numConfig);
-                return message;
+                 deleteModel.DeleteSave(configs);
             }
             catch (Exception ex)
             {
                 var error = new ErrorView();
                 error.ShowError(ex.Message);
-                return null;
             }
 
         }

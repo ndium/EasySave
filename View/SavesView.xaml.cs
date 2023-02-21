@@ -1,4 +1,6 @@
-﻿using EasySaveV2.Model;
+﻿
+
+using EasySaveV2.Model;
 using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
@@ -57,6 +59,9 @@ namespace EasySaveV2.View
         {
             AddSaveWindow addSaveWindow = new AddSaveWindow();
             addSaveWindow.ShowDialog();
+            List<Config> list = _copyViewModel.GetConfigs();
+            SaveGrid.ItemsSource = list;
+
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -66,7 +71,19 @@ namespace EasySaveV2.View
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            List<Config> selectedConfigs = new List<Config>();
 
+            foreach (var item in SaveGrid.SelectedItems)
+            {
+                if (item is Config config)
+                {
+                    selectedConfigs.Add(config);
+                }
+            }
+            DeleteViewModel deleteViewModel= new DeleteViewModel();
+            deleteViewModel.GetDeleteModel(selectedConfigs);
+            List<Config> list = _copyViewModel.GetConfigs();
+            SaveGrid.ItemsSource = list;
         }
     }
 }

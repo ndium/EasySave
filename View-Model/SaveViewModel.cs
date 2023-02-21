@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NewtonsoftJson = Newtonsoft.Json;
 using EasySaveV2.Model;
 
-//Import des éléments du namespace EasySave
+//Import des éléments du namespace EasySaveV2
 using EasySaveV2.View;
 using System.Xml;
 using System.Security.Cryptography.X509Certificates;

@@ -206,7 +206,7 @@ namespace EasySaveV2.Model
         {
             // Charger les applications à partir du fichier JSON
 
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(appPath, "applications.json");
             if (!File.Exists(file))
             {
@@ -217,20 +217,14 @@ namespace EasySaveV2.Model
 
             // Vérifier si les applications sont ouvertes
             bool canSave = true;
-            if (applications == null || applications.Length == 0)
+            foreach (string application in applications)
             {
-                canSave = true;
-            }
-            else
-            {
-                foreach (string application in applications)
+                Process[] processList = Process.GetProcessesByName(application);
+                if (processList.Length > 0)
                 {
-                    Process[] processList = Process.GetProcessesByName(application);
-                    if (processList.Length > 0)
-                    {
-                        canSave = false;
-                        break;
-                    }
+                    Console.WriteLine("L'application " + application + " est en cours d'exécution et bloque la sauvegarde");
+                    canSave = false;
+                    break;
                 }
             }
             return canSave;

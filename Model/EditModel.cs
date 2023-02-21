@@ -18,7 +18,7 @@ namespace EasySaveV2.Model
         public void GetListConfigToModify()
         {/*
             var backupConfigs = new List<Config>();
-            var backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\config.json";
+            var backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2\config.json";
 
             if (File.Exists(backupConfigFile))
             {
@@ -37,7 +37,7 @@ namespace EasySaveV2.Model
             try
             {
                 var backupConfigs = new List<Config>();
-                string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\config.json";
+                string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2\config.json";
 
                 if (File.Exists(backupConfigFile))
                 {

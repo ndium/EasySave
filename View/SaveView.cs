@@ -8,7 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-//Import des éléments du namespace EasySave
+//Import des éléments du namespace EasySaveV2
 using EasySaveV2.View_Model;
 using System.Text.RegularExpressions;
 
@@ -78,10 +78,10 @@ namespace EasySaveV2.View
 
         public int Welcome()
         {
-            Console.Title = "EasySave";
+            Console.Title = "EasySaveV2";
             Console.Clear();
 
-            ResourceManager rm = new ResourceManager("EasySave.Lang.Resources", Assembly.GetExecutingAssembly());
+            ResourceManager rm = new ResourceManager("EasySaveV2.Lang.Resources", Assembly.GetExecutingAssembly());
 
             Console.WriteLine(" _______     ___           _______.____    ____  _______.     ___   ____    ____  _______ \r\n|   ____|   /   \\         /       |\\   \\  /   / /       |    /   \\  \\   \\  /   / |   ____|\r\n|  |__     /  ^  \\       |   (----` \\   \\/   / |   (----`   /  ^  \\  \\   \\/   /  |  |__   \r\n|   __|   /  /_\\  \\       \\   \\      \\_    _/   \\   \\      /  /_\\  \\  \\      /   |   __|  \r\n|  |____ /  _____  \\  .----)   |       |  | .----)   |    /  _____  \\  \\    /    |  |____ \r\n|_______/__/     \\__\\ |_______/        |__| |_______/    /__/     \\__\\  \\__/     |_______|\r\n\n                                                                                          ");
             Console.WriteLine($"{rm.GetString("Welcome", CultureInfo.CurrentUICulture)}\n");

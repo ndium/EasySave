@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySaveV2"
         mc:Ignorable="d"
-        Title="EasySave" 
+        Title="EasySaveV2" 
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -40,7 +40,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"/>
 
-                <TextBlock Text="EASYSAVE"
+                <TextBlock Text="EasySaveV2"
                            Foreground="#FFFFFF"
                            FontFamily="{StaticResource Orbitron}"
                            FontStyle="Normal" 

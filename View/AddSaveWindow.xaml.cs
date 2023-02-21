@@ -37,6 +37,7 @@ namespace EasySaveV2.View
             config.TargetDirectory = Destination.Text;
             config.BackupType = (SaveType)Enum.Parse(typeof(SaveType), SaveType.Text);
             createViewModel.GetCreateModel(config);
+            this.Close();
         }
     }
 }

@@ -33,40 +33,54 @@ namespace EasySaveV2.Model
         public double TransfertTime { get; set; }
 
         public string TimeStamp { get; set; }
-            
+
 
         public List<Config> GetConfigFile(string path)
         {
-            string fileContent = File.ReadAllText(path);
+            var filePath = Path.Combine(path, "config.json");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            if (!File.Exists(filePath))
+            {
+                using (StreamWriter sw = File.CreateText(filePath))
+                {
+                    sw.Write("[]");
+                }
+            }
+
+            string fileContent = File.ReadAllText(filePath);
 
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
             return JsonConfig;
         }
         public Config ReadJsonConfig(string path, int index)
         {
-           
-            string fileContent = File.ReadAllText(path);
+            var filePath = Path.Combine(path, "config.json");
+            string fileContent = File.ReadAllText(filePath);
 
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
             var obj = JsonConfig[index];
             return obj;
         }
-       public LogJsonModel getLogJsonModel() => this;
+        public LogJsonModel getLogJsonModel() => this;
 
         public List<LogJsonModel> getListLog(string path)
         {
             string fileContent = File.ReadAllText(path);
             List<LogJsonModel> logJsonModels = JsonConvert.DeserializeObject<List<LogJsonModel>>(fileContent);
-           
-           
+
+
             return logJsonModels;
         }
 
-        public void SaveLog(long filesize, double transfertTime,Config config)
+        public void SaveLog(long filesize, double transfertTime, Config config)
         {
-           
-            
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+
+
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(backupConfigFile, "config.json");
             string logFilePath = Path.Combine(backupConfigFile, "log.json");
             var listLog = new List<LogJsonModel>();
@@ -77,16 +91,16 @@ namespace EasySaveV2.Model
 
                 try
                 {
-                        //création de la liste
-                        listLog.Add(new LogJsonModel
-                        {
-                            Name = config.BackupName,
-                            FileSource = config.SourceDirectory,
-                            FileTarget = config.TargetDirectory,
-                            FileSize = (int)filesize,
-                            TransfertTime = (int)transfertTime,
-                            TimeStamp = DateTime.Now.ToString(),
-                        });
+                    //création de la liste
+                    listLog.Add(new LogJsonModel
+                    {
+                        Name = config.BackupName,
+                        FileSource = config.SourceDirectory,
+                        FileTarget = config.TargetDirectory,
+                        FileSize = (int)filesize,
+                        TransfertTime = (int)transfertTime,
+                        TimeStamp = DateTime.Now.ToString(),
+                    });
 
                     string logjson = JsonConvert.SerializeObject(listLog);
                     File.WriteAllText(logFilePath, logjson);
@@ -124,7 +138,7 @@ namespace EasySaveV2.Model
                 // Écrire le JSON mis à jour dans le fichier
                 File.WriteAllText(logFilePath, updatedJson);
             }
-            
+
 
 
         }

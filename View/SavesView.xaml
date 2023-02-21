@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="770"
       Title="SavesView"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}">
+      >
 
     <Grid Background="#14213d">
         <ListBox x:Name="SaveGrid" BorderBrush="Transparent"

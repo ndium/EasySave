@@ -17,46 +17,37 @@ namespace EasySaveV2.Model
 
         }
 
-        public List<string> GetListConfig()
+
+
+        public void DeleteSave(List<Config> configsToDelete)
         {
-            List<string> listConfig = new List<string>();
-            var backupConfigs = new List<Config>();
-
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
-            string file = Path.Combine(backupConfigFile, "config.json");
-
-            if (File.Exists(file))
-            {
-                backupConfigs = JsonConvert.DeserializeObject<List<Config>>(File.ReadAllText(file));
-            }
-
-            for (int i = 0; i < backupConfigs.Count; i++)
-            {
-                listConfig.Add($"{i + 1}. {backupConfigs[i].BackupName}");
-            }
-            return listConfig;
-        }
-
-        public string DeleteSave(int configToDelete)
-        {
-
-            var backupConfigs = new List<Config>();
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
-            string file = Path.Combine(backupConfigFile, "config.json");
-            string message = "";
-            if (configToDelete == null)
+            if (configsToDelete == null)
             {
                 throw new Exception("NotFound");
 
             }
-            if (configToDelete > 0 && configToDelete <= backupConfigs.Count)
+            string backupConfigFile = Global.JSON_PATH;
+            var logJsonModel = new LogJsonModel();
+            var allConfigs = logJsonModel.GetConfigFile(backupConfigFile);
+            for (int i = 0; i < configsToDelete.Count; i++)
             {
-                backupConfigs.RemoveAt(configToDelete - 1);
-                File.WriteAllText(file, JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));
-                message=($"{langHelper._rm.GetString("successDelete", CultureInfo.CurrentUICulture)}\n");
+                for (int j = 0; j < allConfigs.Count; j++)
+                {
+                    if (configsToDelete[i].BackupName == allConfigs[j].BackupName && configsToDelete[i].SourceDirectory == allConfigs[j].SourceDirectory
+                        && configsToDelete[i].TargetDirectory == allConfigs[j].TargetDirectory && configsToDelete[i].BackupType == allConfigs[j].BackupType)
+                    {
+                        allConfigs.RemoveAt(j);
+                    }
+                }
             }
-            return message;
+
+            string file = Path.Combine(backupConfigFile, "config.json");
+
+
+            File.WriteAllText(file, JsonConvert.SerializeObject(allConfigs, Formatting.Indented));
+
         }
 
     }
 }
+

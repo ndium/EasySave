@@ -20,7 +20,7 @@ namespace EasySaveV2.View_Model
             {
                 
                 CreateModel createModel = new CreateModel();
-                var message = createModel.CreateSave(config);
+                 createModel.CreateSave(config);
             }
             catch (Exception ex)
             {

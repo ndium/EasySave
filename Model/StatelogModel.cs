@@ -28,7 +28,7 @@ namespace EasySaveV2.Model
         public void Savelog(long filesize, double transfertTime, int totalfilessize, int totalnbfiles, Config config, bool IsActived)
         {
 
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(backupConfigFile, "config.json");
             var listLog = new List<Statelog>();
 
