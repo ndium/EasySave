@@ -54,6 +54,7 @@ namespace EasySaveV2.View
             worker = new BackgroundWorker();
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
             worker.WorkerReportsProgress= true;
+            worker.WorkerSupportsCancellation= true;
             worker.DoWork += Worker_DoWork;
             worker.ProgressChanged += Worker_ProgressChanged;
             worker.RunWorkerAsync();
@@ -83,7 +84,25 @@ namespace EasySaveV2.View
 
         private void Worker_DoWork(object? sender, DoWorkEventArgs e)
         {
-            _copyViewModel.GetCopyModel(selectedConfigs, worker);
+            try
+            {
+                _copyViewModel.GetCopyModel(selectedConfigs, worker);
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            catch(Exception ex)
+            {
+                //On rejette l'erreur pour activer e.Error != null
+                //C'EST NORMAL QUE CA BLOQUE AU DEBUGGING !!!
+                // |
+                // |
+                // |
+                // V
+                throw ex;
+            }
         }
 
         private void Worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
@@ -91,10 +110,14 @@ namespace EasySaveV2.View
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
+                loadingBar.Close();
+
             }
             else if (e.Cancelled)
             {
                 MessageBox.Show("L'opération a été annulée.");
+                loadingBar.Close();
+
             }
             else
             {
