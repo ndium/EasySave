@@ -39,8 +39,11 @@ namespace EasySaveV2.Model
 
             string sourceFile = config.SourceDirectory;
             string targetFile = config.TargetDirectory;
+            var logJsonModel = new LogJsonModel();
+            var statelog = new Statelog();
             Stopwatch watch = new Stopwatch();
             watch.Start();
+
             if (sourceFile != null)
             {
                 var dir = new DirectoryInfo(sourceFile);
@@ -48,7 +51,7 @@ namespace EasySaveV2.Model
                 if (!dir.Exists)
                 {
 
-
+                    bool state = true;
                     var fileinfo = new FileInfo(sourceFile);
                     string filename = Path.GetFileName(sourceFile);
                     var fileSize = fileinfo.Length;
@@ -63,23 +66,28 @@ namespace EasySaveV2.Model
                             var buffer = new byte[4096];
                             int bytesRead;
                             int totalBytes = 0;
-
+                            Stopwatch stopwatch = new Stopwatch();
+                            stopwatch.Start();
+                            double byteTimeElapsed = 0;
                             // Boucle de lecture et d'écriture
                             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
+
                                 target.Write(buffer, 0, bytesRead);
                                 totalBytes += bytesRead;
 
                                 // Calcul de la progression
                                 _progress = (int)((totalBytes / (double)fileSize) * 100);
                                 localWorker.ReportProgress(_progress, string.Format($"{_progress}%"));
+                                statelog.SaveLog(fileSize, byteTimeElapsed, fileSize, 1, config, state);
                             }
                         }
                     }
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
-                    var logJsonModel = new LogJsonModel();
+
                     logJsonModel.SaveLog(fileSize, timeElapsed, config);
+
 
                 }
                 else
@@ -112,11 +120,13 @@ namespace EasySaveV2.Model
                         double timeElapsed = watch.Elapsed.TotalSeconds;
                         LogJsonModel logJsonModel = new LogJsonModel();
                         logJsonModel.SaveLog(totalSize, timeElapsed, config);
+                        statelog.SaveLog(totalSize, timeElapsed, 1, 1, config, true);
                     }
                     catch (Exception e)
                     {
                         
                     }
+                  
                 }
 
 

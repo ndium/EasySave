@@ -1,4 +1,5 @@
-﻿using EasySaveV2.Model;
+using EasySave.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,12 @@ namespace EasySaveV2.View_Model
     class LogViewModel
     {
         LogJsonModel logJson = new LogJsonModel();
+       
 
-        
+        public List<LogJsonModel> getListLog()
+        {
+            
+            return logJson.getListLog();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +12,7 @@ namespace EasySaveV2.Model
     {
       LogJsonModel LogJsonModel = new LogJsonModel();
         LangHelper langHelper = new LangHelper();
+
 
         public CreateModel()
         {
