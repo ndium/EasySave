@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,30 +28,60 @@ namespace EasySaveV2.View
         {
             InitializeComponent();
             DataContext = this;
-            //BackgroundWorker worker = new BackgroundWorker();
-            //worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-            //worker.WorkerReportsProgress = true;
-            //worker.DoWork += Worker_DoWork;
-            //worker.ProgressChanged += Worker_ProgressChanged;
-            //worker.RunWorkerAsync();
+
+
+        }
+        public async void AddProgressBar()
+        {
+            Thread myThread = Thread.CurrentThread;
+            ProgressBar progressBar;
+            Label middle_label;
+
+
+            Dispatcher.Invoke(() =>
+            {
+                progressBar = new ProgressBar();
+                progressBar.Minimum = 0;
+                progressBar.Maximum = 100;
+                progressBar.Width = 500;
+                progressBar.Height = 20;
+                progressBar.Margin = new Thickness(10, 10, 10, 10);
+                progressBar.Name = myThread.Name;
+                MyStackPanel.Children.Add(progressBar);
+
+                middle_label = new Label();
+                middle_label.Height = 30;
+                middle_label.HorizontalAlignment = HorizontalAlignment.Center;
+                middle_label.VerticalAlignment = VerticalAlignment.Center;
+                middle_label.FontSize = 18;
+                middle_label.Margin = new Thickness(20, -45, 20, 0);
+                middle_label.Name = $"{myThread.Name}label1";
+                MyStackPanel.Children.Add(middle_label);
+            });
+
         }
 
-        //private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
-        //{
-        //    copyProgressBar.Value = e.ProgressPercentage;
-        //    numberProgressBar.Text = (string)e.UserState;
+        public void UpdateProgressBar(ProgressChangedEventArgs e)
+        {
+            ProgressBar progressBar = null;
+            Label middle_label = null;
 
-        //}
+            foreach (var child in MyStackPanel.Children)
+            {
+                if ((child as FrameworkElement)?.Name == e.UserState.ToString())
+                {
+                    progressBar = child as ProgressBar;
+                    progressBar.Value = e.ProgressPercentage;
+                    
 
-        //private void Worker_DoWork(object? sender, DoWorkEventArgs e)
-        //{
-        //    var worker = sender as BackgroundWorker;
-        //    worker.ReportProgress(0, )
-        //}
-
-        //private void Worker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
+                    
+                }
+                else if((child as FrameworkElement)?.Name == $"{e.UserState}label1")
+                {
+                    middle_label = child as Label;
+                    middle_label.Content = $"{progressBar.Value}%";
+                }
+            }
+        }
     }
 }

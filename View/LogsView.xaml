@@ -7,52 +7,50 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="770"
       Title="LogsView"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}">
+      >
 
     <Grid Background="#14213d">
-       
-          <ScrollViewer Width="600" Margin="0,10,200,10" CanContentScroll="True" >
 
 
-
-            <StackPanel Orientation="Vertical">
-                <!-- Radiobutton pour la conversion en XML -->
-                <RadioButton Content="XML" GroupName="ConversionType" Checked="ConvertToXml_Checked" />
-
-                <!-- Radiobutton pour la conversion en JSON -->
-                <RadioButton Content="JSON" GroupName="ConversionType" Checked="ConvertToJson_Checked" />
-                
-                <ListBox x:Name="LogGrid" BorderBrush="Transparent"
+        <StackPanel Orientation="Vertical" Margin="20,55,20,0">
+            <ListBox x:Name="LogGrid" BorderBrush="Transparent"
                      Background="Transparent" Margin="10,15,240,15" 
                      Foreground="White" ScrollViewer.CanContentScroll="True" 
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     SelectionMode="Multiple">
-                    <ListBox.ItemTemplate>
-                        
-                        <DataTemplate>
-                            <Grid Margin="4">
-                                <TextBlock Text="{Binding Name}" Margin="0,0,0,0"/>
-                                <TextBlock Text="{Binding FileSource}" Margin="0,15,0,0"/>
-                                <TextBlock Text="{Binding FileTarget}" Margin="0,30,0,0"/>
-                                <TextBlock Text="{Binding FileSize}" Margin="0,45,0,0"/>
-                                <TextBlock Text="{Binding TransfertTime}" Margin="0,60,0,0"/>
-                                <TextBlock Text="{Binding TimeStamp}" Margin="0,75,0,0"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical">
-                                
-                            </StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-            </StackPanel>
-        </ScrollViewer>
+                     SelectionMode="Multiple" Height="623" Width="706"  >
+                <ListBox.ItemTemplate>
+
+                    <DataTemplate>
+                        <Grid Margin="5">
+                            <TextBlock Text="{Binding Name}" Margin="0,0,0,0"/>
+                            <TextBlock Text="{Binding FileSource}" Margin="0,15,0,0"/>
+                            <TextBlock Text="{Binding FileTarget}" Margin="0,30,0,0"/>
+                            <TextBlock Text="{Binding FileSize}" Margin="0,45,0,0"/>
+                            <TextBlock Text="{Binding TransfertTime}" Margin="0,60,0,0"/>
+                            <TextBlock Text="{Binding TimeStamp}" Margin="0,75,0,0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical">
+
+                        </StackPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </StackPanel>
+
+        <!-- Radiobutton pour la conversion en XML -->
+        <StackPanel Width="200" VerticalAlignment="Top" Margin="20,25,550,0">
+            <RadioButton Content="XML" GroupName="ConversionType" Checked="ConvertToXml_Checked" HorizontalAlignment="Left" />
+
+            <!-- Radiobutton pour la conversion en JSON -->
+            <RadioButton Content="JSON" GroupName="ConversionType" Checked="ConvertToJson_Checked" HorizontalAlignment="Left"  />
+        </StackPanel>
 
 
-       
+
     </Grid>
 
 </Page>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddApp" xml:space="preserve">
-    <value>Appliction's name</value>
+    <value>Application's name</value>
   </data>
   <data name="AddButton" xml:space="preserve">
     <value>Add</value>
@@ -184,7 +184,7 @@
     <value>The configuration was not found</value>
   </data>
   <data name="SaveApp" xml:space="preserve">
-    <value>Application Save with success</value>
+    <value>Application saved with success</value>
   </data>
   <data name="SaveAppButton" xml:space="preserve">
     <value>Save</value>

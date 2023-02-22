@@ -83,7 +83,7 @@ namespace EasySaveV2.Model
 
         public void ConvertLogs(string format)
         {
-
+            
             // Load the log data from the JSON file
             string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
             string logFilePath = Path.Combine(backupConfigFile, "log.json");

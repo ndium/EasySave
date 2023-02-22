@@ -1,4 +1,4 @@
-﻿
+
 
 using EasySaveV2.Model;
 using EasySaveV2.View_Model;
@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,14 +27,12 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class SavesView : Page
     {
-        public BackgroundWorker worker { get; set; }
         public CopyViewModel _copyViewModel { get; set; }
-        private List<Config> selectedConfigs { get; set; }
-        private LoadingBar loadingBar { get; set; }
+        private LoadingBar _loadingBar { get; set; }
         public SavesView()
         {
             InitializeComponent();
-            DataContext = this;
+            DataContext = _loadingBar;
             _copyViewModel = new CopyViewModel();
             List<Config> list = _copyViewModel.GetConfigs();
             SaveGrid.ItemsSource = list;
@@ -51,49 +50,93 @@ namespace EasySaveV2.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-            worker.WorkerReportsProgress= true;
-            worker.WorkerSupportsCancellation= true;
-            worker.DoWork += Worker_DoWork;
-            worker.ProgressChanged += Worker_ProgressChanged;
-            worker.RunWorkerAsync();
-            
-            selectedConfigs = new List<Config>();
-            
-            foreach(var item in SaveGrid.SelectedItems)
+
+            _loadingBar = new LoadingBar();
+            _loadingBar.Show();
+            _loadingBar.Activate();
+            _loadingBar.Focus();
+
+
+            foreach (var item in SaveGrid.SelectedItems)
             {
-                if (item is Config config) 
-                { 
-                    selectedConfigs.Add(config);
+                if (item is Config config)
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        Thread thread = new Thread(_loadingBar.AddProgressBar);
+                        thread.Name = config.BackupName;
+                        thread.Start();
+                    });
+
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+                    worker.WorkerReportsProgress = true;
+                    worker.WorkerSupportsCancellation = true;
+                    worker.DoWork += Worker_DoWork;
+                    worker.ProgressChanged += Worker_ProgressChanged;
+                    worker.RunWorkerAsync(argument: config);
+
                 }
             }
-            loadingBar = new LoadingBar();
-            loadingBar.Show();
-
-
 
 
         }
 
         private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
-            loadingBar.copyProgressBar.Value = e.ProgressPercentage;
-            loadingBar.numberProgressBar.Text = (string)e.UserState;
+            //switch (e.ProgressPercentage)
+            //{
+            //    case 10:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 20:
+            //        _loadingBar.UpdateProgressBar(e);
+
+            //        break;
+            //    case 30:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 40:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 50:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 60:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+
+            //    case 70:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 80:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 90:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+            //    case 100:
+            //        _loadingBar.UpdateProgressBar(e);
+            //        break;
+
+            //}
+            _loadingBar.UpdateProgressBar(e);
         }
 
         private void Worker_DoWork(object? sender, DoWorkEventArgs e)
         {
             try
             {
-                _copyViewModel.GetCopyModel(selectedConfigs, worker);
-                if (worker.CancellationPending == true)
+                var config = e.Argument as Config;
+                var localdowork = sender as BackgroundWorker;
+                _copyViewModel.GetCopyModel(config, localdowork);
+                if (localdowork.CancellationPending == true)
                 {
                     e.Cancel = true;
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //On rejette l'erreur pour activer e.Error != null
                 //C'EST NORMAL QUE CA BLOQUE AU DEBUGGING !!!
@@ -109,21 +152,19 @@ namespace EasySaveV2.View
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
-                loadingBar.Close();
+                //MessageBox.Show(e.Error.Message);
 
             }
             else if (e.Cancelled)
             {
-                MessageBox.Show("L'opération a été annulée.");
-                loadingBar.Close();
+                //MessageBox.Show("L'opération a été annulée.");
+
 
             }
             else
             {
-                loadingBar.copyProgressBar.Value = 100;
-                MessageBox.Show("L'opération est terminée.");
-                loadingBar.Close();
+                
+                //MessageBox.Show("L'opération est terminée.");
             }
 
         }
@@ -153,7 +194,7 @@ namespace EasySaveV2.View
                     selectedConfigs.Add(config);
                 }
             }
-            DeleteViewModel deleteViewModel= new DeleteViewModel();
+            DeleteViewModel deleteViewModel = new DeleteViewModel();
             deleteViewModel.GetDeleteModel(selectedConfigs);
             List<Config> list = _copyViewModel.GetConfigs();
             SaveGrid.ItemsSource = list;

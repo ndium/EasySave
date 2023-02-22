@@ -40,12 +40,12 @@
             </DockPanel.Resources>
 
             <DockPanel  DockPanel.Dock="Top" >
-                <TextBlock Name= "Name" Margin="0,0,12,0"/>
+                <TextBlock Name= "Name" />
                 <TextBox x:Name="SaveName" />
             </DockPanel>
 
             <DockPanel  DockPanel.Dock="Top">
-                <TextBlock Name= "SourcePath" Margin="0,0,40,0"/>
+                <TextBlock Name= "SourcePath" />
                 <TextBox x:Name="Source"/>
             </DockPanel>
 

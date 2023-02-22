@@ -20,20 +20,21 @@ namespace EasySaveV2.Model
     {
 
         private int _progress { get; set; }
-       
-        
+        private long TotalBytes { get; set; }
 
 
 
         public void FullCopy(Config config, object sender)
         {
+            TotalBytes = 0;
+            int oldProgress = 0;
             var localWorker = sender as BackgroundWorker;
-            localWorker.ReportProgress(0, string.Format("0"));
+            localWorker.ReportProgress(0, string.Format($"{config.BackupName}"));
             // Effectuer la sauvegarde si possible
             if (!CheckBusinessApp())
-            { 
+            {
                 throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
-                
+
             }
 
 
@@ -65,7 +66,7 @@ namespace EasySaveV2.Model
                             // Allocation d'un buffer de lecture de 4 Ko
                             var buffer = new byte[4096];
                             int bytesRead;
-                            int totalBytes = 0;
+                           
                             Stopwatch stopwatch = new Stopwatch();
                             stopwatch.Start();
                             double byteTimeElapsed = 0;
@@ -74,13 +75,19 @@ namespace EasySaveV2.Model
                             {
 
                                 target.Write(buffer, 0, bytesRead);
-                                totalBytes += bytesRead;
+                                TotalBytes += bytesRead;
 
                                 // Calcul de la progression
-                                _progress = (int)((totalBytes / (double)fileSize) * 100);
-                                localWorker.ReportProgress(_progress, string.Format($"{_progress}%"));
+                                _progress = (int)((TotalBytes / (double)fileSize) * 100);
+                                if (oldProgress != _progress)
+                                {
+                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                    oldProgress = _progress;
+                                }
                                 statelog.SaveLog(fileSize, byteTimeElapsed, fileSize, 1, config, state);
+
                             }
+
                         }
                     }
                     watch.Stop();
@@ -94,12 +101,12 @@ namespace EasySaveV2.Model
                 {
                     try
                     {
-                        
+
                         DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
                         long totalSize = GetDirectorySize(sourceFolderInfo);
-                        long totalBytes = 0;
+                        
 
-                         CopyDirectory(sourceFolderInfo, targetFile, totalSize, totalBytes);
+                        CopyDirectory(sourceFolderInfo, targetFile, totalSize);
 
                         /*foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
                         {
@@ -118,21 +125,22 @@ namespace EasySaveV2.Model
 
                         watch.Stop();
                         double timeElapsed = watch.Elapsed.TotalSeconds;
-                        LogJsonModel logJsonModel = new LogJsonModel();
                         logJsonModel.SaveLog(totalSize, timeElapsed, config);
                         statelog.SaveLog(totalSize, timeElapsed, 1, 1, config, true);
+                        localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
+
                     }
                     catch (Exception e)
                     {
-                        
+
                     }
-                  
+
                 }
 
 
             }
 
-            async Task EncryptionRecursiveFile(DirectoryInfo sourceFolderInfo,string sourceFile, string targetFile)
+            async Task EncryptionRecursiveFile(DirectoryInfo sourceFolderInfo, string sourceFile, string targetFile)
             {
                 foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
                 {
@@ -149,7 +157,7 @@ namespace EasySaveV2.Model
                 }
             }
 
-            async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize, long totalBytes)
+            async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize)
             {
                 var localWorker = sender as BackgroundWorker;
                 localWorker.ReportProgress(0, string.Format("0"));
@@ -180,16 +188,24 @@ namespace EasySaveV2.Model
                             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
                                 target.Write(buffer, 0, bytesRead);
-                                totalBytes += bytesRead;
+                                TotalBytes += bytesRead;
 
                                 // Calcul de la progression
-                                _progress = (int)((totalBytes / (double)totalSize) * 100);
-                                localWorker.ReportProgress(_progress, string.Format($"{_progress}%"));
+                                _progress = (int)((TotalBytes / (double)totalSize) * 100);
+
+                                if (oldProgress != _progress)
+                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                oldProgress = _progress;
+
+
                             }
 
                         }
                     }
+
                 }
+
+
 
 
 
@@ -197,7 +213,7 @@ namespace EasySaveV2.Model
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
-                    CopyDirectory(subDir, newDestinationDir, totalSize, totalBytes);
+                    CopyDirectory(subDir, newDestinationDir, totalSize);
                 }
             }
         }
@@ -219,14 +235,17 @@ namespace EasySaveV2.Model
 
             return size;
         }
-        public async Task DifferentialCopy(Config config,  object sender)
+        public async Task DifferentialCopy(Config config, object sender)
         {
+            int TotalBytes = 0;
+            int oldProgress = 0;
+            var localWorker = sender as BackgroundWorker;
             if (CheckBusinessApp())
             {
                 string sourceFolder = config.SourceDirectory;
                 string targetFolder = config.TargetDirectory;
                 var sourceFolderInfo = new DirectoryInfo(sourceFolder);
-                long totalSize =  GetDirectorySize(sourceFolderInfo);
+                long totalSize = GetDirectorySize(sourceFolderInfo);
                 foreach (var fileInfo in new DirectoryInfo(sourceFolder).GetFiles())
                 {
                     var sourceFile = fileInfo.FullName;
@@ -249,16 +268,19 @@ namespace EasySaveV2.Model
                         {
                             var buffer = new byte[4096];
                             int bytesRead;
-                            int totalBytes = 0;
 
 
                             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
                                 target.Write(buffer, 0, bytesRead);
-                                totalBytes += bytesRead;
+                                TotalBytes += bytesRead;
 
                                 // Calcul de la progression
-                                _progress = (int)((totalBytes / (double)totalSize) * 100);
+                                _progress = (int)((TotalBytes / (double)totalSize) * 100);
+
+                                if (oldProgress != _progress)
+                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                oldProgress = _progress;
 
                             }
 
@@ -316,7 +338,7 @@ namespace EasySaveV2.Model
                     processCryptosoft.Start();
                 }
             }
-            
+
         }
     }
 }

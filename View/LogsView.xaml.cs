@@ -33,7 +33,7 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LogsView : Page
     {
-        static readonly SemaphoreSlim _semaphore = new System.Threading.SemaphoreSlim(1);
+        static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
         public LogJsonModel logs { get; set; }
 
         public LogsView()
@@ -41,12 +41,11 @@ namespace EasySaveV2.View
             InitializeComponent();
             DataContext = this;
             logs = new LogJsonModel();
-            Translation();
 
 
             try
             {
-               
+
                 List<LogJsonModel> list = logs.getListLog();
 
                 // Utilisation du sémaphore pour protéger l'accès à l'instance de LogJsonModel
@@ -68,23 +67,23 @@ namespace EasySaveV2.View
 
 
         }
-        public void Translation()
-        {
-            LangHelper langHelper = new LangHelper();
-            SelectFile.Text = $"{langHelper._rm.GetString("SelectFile")}";
-            Convert.Content = $"{langHelper._rm.GetString("Convert")}";
-        }
 
         private void ConvertToXml_Checked(object sender, RoutedEventArgs e)
         {
             try { logs.ConvertLogs("xml"); }
-            catch { MessageBox.Show("already exist", "Error Message", MessageBoxButton.OK); }
+            catch { MessageBox.Show("already exist"); }
         }
 
         private void ConvertToJson_Checked(object sender, RoutedEventArgs e)
         {
-            try { logs.ConvertLogs("json"); }
-            catch { MessageBox.Show("already exist", "Error Message", MessageBoxButton.OK); }
+            try 
+            { 
+                logs.ConvertLogs("json"); 
+            }
+            catch 
+            { 
+                MessageBox.Show("already exist"); 
+            }
         }
 
 

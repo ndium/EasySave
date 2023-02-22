@@ -8,11 +8,12 @@
         mc:Ignorable="d" 
          d:DesignHeight="700" d:DesignWidth="770"
         Title="LoadingBar" Height="700" Width="770">
-    <Grid Background="#14213d">
-        <ProgressBar  Minimum="0" Maximum="100"  x:Name="copyProgressBar" Width="500" Height="20"/>
-        <TextBlock x:Name="numberProgressBar" Text="" Background="Transparent" Width="20" Height="20" Margin="651,332,99,332">
+    <Grid Background="#14213d" x:Name="MyGrid">
+        <StackPanel Orientation="Vertical" x:Name="MyStackPanel" Margin="10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+
             
-        </TextBlock>
+        </StackPanel>
+       
     </Grid>
     
 </Window>
