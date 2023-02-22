@@ -1,4 +1,4 @@
-﻿using EasySaveV2.Model;
+using EasySaveV2.Model;
 using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,11 @@ using Newtonsoft.Json;
 using Path = System.IO.Path;
 using System.Reflection;
 using EasySaveV2.View_Model;
+using System.Xml;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
+using System.Threading;
 
 namespace EasySaveV2.View
 {
@@ -28,25 +33,35 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LogsView : Page
     {
+        static readonly SemaphoreSlim _semaphore = new System.Threading.SemaphoreSlim(1);
+        public LogJsonModel logs { get; set; }
 
         public LogsView()
         {
             InitializeComponent();
+            DataContext = this;
+            logs = new LogJsonModel();
             Translation();
 
-            var logs = new LogViewModel();
-            /*List<Config> list = LogJson.log
-            SaveGrid.ItemsSource = list;*/
-            DataContext = this;
+
             try
             {
+               
+                List<LogJsonModel> list = logs.getListLog();
 
+                // Utilisation du sémaphore pour protéger l'accès à l'instance de LogJsonModel
+                _semaphore.Wait();
 
+                LogGrid.ItemsSource = list;
             }
             catch
             {
                 MessageBox.Show("Error logs not found", "Error Message", MessageBoxButton.OK);
 
+            }
+            finally
+            {
+                _semaphore.Release();
             }
 
 
@@ -60,22 +75,19 @@ namespace EasySaveV2.View
             Convert.Content = $"{langHelper._rm.GetString("Convert")}";
         }
 
-
-
-        public void ConvertButton_Click(object sender, RoutedEventArgs e)
+        private void ConvertToXml_Checked(object sender, RoutedEventArgs e)
         {
-            //string filePath = "path/to/file";
-            //bool useXml = xmlRadio.IsChecked ?? false;
-
-            //if (useXml)
-            //{
-            //    // convert file to XML
-            //}
-            //else
-            //{
-            //    // convert file to JSON
-            //}
+            try { logs.ConvertLogs("xml"); }
+            catch { MessageBox.Show("already exist", "Error Message", MessageBoxButton.OK); }
         }
+
+        private void ConvertToJson_Checked(object sender, RoutedEventArgs e)
+        {
+            try { logs.ConvertLogs("json"); }
+            catch { MessageBox.Show("already exist", "Error Message", MessageBoxButton.OK); }
+        }
+
+
 
     }
 }

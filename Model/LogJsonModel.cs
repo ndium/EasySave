@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,12 +17,14 @@ using System.Xml.Linq;
 using System.Reflection;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace EasySaveV2.Model
 {
     public class LogJsonModel
     {
-        LangHelper langHelper = new LangHelper();
         public string Name { get; set; }
         public string FileSource { get; set; }
 
@@ -67,16 +69,38 @@ namespace EasySaveV2.Model
         }
         public LogJsonModel getLogJsonModel() => this;
 
-        public List<LogJsonModel> getListLog(string path)
+        public List<LogJsonModel> getListLog()
         {
-            string fileContent = File.ReadAllText(path);
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string logFilePath = Path.Combine(backupConfigFile, "log.json");
+
+            string fileContent = File.ReadAllText(logFilePath);
+            
             List<LogJsonModel> logJsonModels = JsonConvert.DeserializeObject<List<LogJsonModel>>(fileContent);
-
-
             return logJsonModels;
         }
+       
 
-        public void SaveLog(long filesize, double transfertTime, Config config)
+        public void ConvertLogs(string format)
+        {
+
+            // Load the log data from the JSON file
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string logFilePath = Path.Combine(backupConfigFile, "log.json");
+            List<LogJsonModel> logData = JsonConvert.DeserializeObject<List<LogJsonModel>>(File.ReadAllText(logFilePath));
+
+            // Create a serializer for the LogJsonModel class
+            XmlSerializer serializer = new XmlSerializer(typeof(List<LogJsonModel>));
+
+            // Serialize the log data to XML
+            using (StreamWriter writer = new StreamWriter(Path.Combine(backupConfigFile, "log.xml")))
+            {
+                serializer.Serialize(writer, logData);
+            }
+
+        }
+
+        public void SaveLog(long filesize, double transfertTime,Config config)
         {
 
 
@@ -109,7 +133,7 @@ namespace EasySaveV2.Model
                 }
                 catch (Exception ex)
                 {
-                    Console.Write($"{langHelper._rm.GetString("Error Daily Logs", CultureInfo.CurrentUICulture)}" + ex.Message);
+                    //Console.Write($"{langHelper._rm.GetString("Error Daily Logs", CultureInfo.CurrentUICulture)}" + ex.Message);
                 }
             }
             else
@@ -133,7 +157,7 @@ namespace EasySaveV2.Model
                 });
 
                 // Sérialiser l'objet mis à jour en JSON
-                var updatedJson = JsonConvert.SerializeObject(log, Formatting.Indented);
+                var updatedJson = JsonConvert.SerializeObject(log, NewtonsoftJson.Formatting.Indented);
 
                 // Écrire le JSON mis à jour dans le fichier
                 File.WriteAllText(logFilePath, updatedJson);
