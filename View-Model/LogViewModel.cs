@@ -18,5 +18,12 @@ namespace EasySaveV2.View_Model
             
             return logJson.getListLog();
         }
+
+        public string getListLogJson()
+        { return logJson.getListLogJson(); }
+
+        public string getListLogXML()
+        { return logJson.getListLogXML(); }
+
     }
 }

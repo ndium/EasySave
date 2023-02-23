@@ -46,18 +46,18 @@ namespace EasySaveV2.View_Model
         }
 
 
-        public Config GetConfigInfo(int index)
+        public async Task<Config> GetConfigInfo(int index)
         {
             var jsonModel = new LogJsonModel();
-            Config obj = jsonModel.ReadJsonConfig(LocalPath, index);
+            Config obj = await jsonModel.ReadJsonConfig(LocalPath, index);
             return obj;
 
         }
-        public List<Config> GetConfigs()
+        public  List<Config> GetConfigs()
         {
 
             var jsonModel = new LogJsonModel();
-            List<Config> obj = jsonModel.GetConfigFile(LocalPath);
+            List<Config> obj =  jsonModel.GetConfigFile(LocalPath);
             return obj;
         }
     }

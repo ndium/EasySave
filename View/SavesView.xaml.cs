@@ -135,7 +135,7 @@ namespace EasySaveV2.View
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private  void Button_Click_1(object sender, RoutedEventArgs e)
         {
             AddSaveWindow addSaveWindow = new AddSaveWindow();
             addSaveWindow.ShowDialog();

@@ -19,7 +19,6 @@ using System.IO;
 using Newtonsoft.Json;
 using Path = System.IO.Path;
 using System.Reflection;
-using EasySaveV2.View_Model;
 using System.Xml;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -33,23 +32,25 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LogsView : Page
     {
-        static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
-        public LogJsonModel logs { get; set; }
+        //  static readonly SemaphoreSlim _semaphore = new System.Threading.SemaphoreSlim(1);
+        public LogJsonModel Logs = new LogJsonModel();
 
         public LogsView()
         {
             InitializeComponent();
+          
             DataContext = this;
-            logs = new LogJsonModel();
+            
+
 
 
             try
             {
 
-                List<LogJsonModel> list = logs.getListLog();
+                List<LogJsonModel> list = Logs.getListLog();
 
                 // Utilisation du sémaphore pour protéger l'accès à l'instance de LogJsonModel
-                _semaphore.Wait();
+
 
                 LogGrid.ItemsSource = list;
             }
@@ -58,33 +59,31 @@ namespace EasySaveV2.View
                 MessageBox.Show("Error logs not found", "Error Message", MessageBoxButton.OK);
 
             }
-            finally
-            {
-                _semaphore.Release();
-            }
+
 
 
 
 
         }
 
+
         private void ConvertToXml_Checked(object sender, RoutedEventArgs e)
         {
-            try { logs.ConvertLogs("xml"); }
-            catch { MessageBox.Show("already exist"); }
+            Logs.ConvertLogs("xml");
+            Txtlog.Text = Logs.getListLogXML(); 
+
+
         }
 
         private void ConvertToJson_Checked(object sender, RoutedEventArgs e)
         {
-            try 
-            { 
-                logs.ConvertLogs("json"); 
-            }
-            catch 
-            { 
-                MessageBox.Show("already exist"); 
-            }
+      
+      
+            Txtlog.Text = Logs.getListLogJson(); 
+
+
         }
+
 
 
 

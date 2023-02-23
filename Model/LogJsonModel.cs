@@ -20,11 +20,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Threading;
 
 namespace EasySaveV2.Model
 {
     public class LogJsonModel
     {
+        static private SemaphoreSlim semaphore = new SemaphoreSlim(1);
         public string Name { get; set; }
         public string FileSource { get; set; }
 
@@ -36,9 +38,16 @@ namespace EasySaveV2.Model
 
         public string TimeStamp { get; set; }
 
+        public string CryptageTime { get; set; }
 
-        public List<Config> GetConfigFile(string path)
+        public LogJsonModel()
         {
+
+        }
+        public  List<Config> GetConfigFile(string path)
+        {
+
+        
             var filePath = Path.Combine(path, "config.json");
             if (!Directory.Exists(path))
             {
@@ -58,37 +67,78 @@ namespace EasySaveV2.Model
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
             return JsonConfig;
         }
-        public Config ReadJsonConfig(string path, int index)
+        public async Task<Config> ReadJsonConfig(string path, int index)
         {
+            await semaphore.WaitAsync();
+
             var filePath = Path.Combine(path, "config.json");
             string fileContent = File.ReadAllText(filePath);
 
             List<Config> JsonConfig = JsonConvert.DeserializeObject<List<Config>>(fileContent);
             var obj = JsonConfig[index];
             return obj;
+            semaphore.Release();
         }
-        public LogJsonModel getLogJsonModel() => this;
+        
 
         public List<LogJsonModel> getListLog()
         {
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2";
             string logFilePath = Path.Combine(backupConfigFile, "log.json");
 
             string fileContent = File.ReadAllText(logFilePath);
             
-            List<LogJsonModel> logJsonModels = JsonConvert.DeserializeObject<List<LogJsonModel>>(fileContent);
-            return logJsonModels;
+           
+            return JsonConvert.DeserializeObject<List<LogJsonModel>>(fileContent);
         }
-       
 
-        public void ConvertLogs(string format)
+        public string getListLogJson()
         {
-            
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2";
+            string logFilePath = Path.Combine(backupConfigFile, "log.json");
+
+            string fileContent = File.ReadAllText(logFilePath);
+            return fileContent;
+        }
+        public string getListLogXML()
+        {
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2";
+            string logFilePath = Path.Combine(backupConfigFile, "log.xml");
+
+
+            string FileContent = "LOGS.XML NOT FOUND";
+
+            // Check if the file exists
+            if (File.Exists(logFilePath))
+            {
+                // Load the XML document
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(logFilePath);
+
+                // Get the XML string from the document
+                using (StringWriter stringWriter = new StringWriter())
+                {
+                    XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);
+                    xmlDoc.WriteTo(xmlWriter);
+                    FileContent = stringWriter.ToString();
+                }
+
+            }
+
+            return FileContent;
+        }
+
+        public async Task ConvertLogs(string format)
+        {
+            await semaphore.WaitAsync();
+
             // Load the log data from the JSON file
-            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave";
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2";
             string logFilePath = Path.Combine(backupConfigFile, "log.json");
             List<LogJsonModel> logData = JsonConvert.DeserializeObject<List<LogJsonModel>>(File.ReadAllText(logFilePath));
 
+            if(format == "xml")
+            { 
             // Create a serializer for the LogJsonModel class
             XmlSerializer serializer = new XmlSerializer(typeof(List<LogJsonModel>));
 
@@ -97,16 +147,20 @@ namespace EasySaveV2.Model
             {
                 serializer.Serialize(writer, logData);
             }
+            }
+            
+            semaphore.Release();
 
         }
 
-        public void SaveLog(long filesize, double transfertTime,Config config)
+        public async Task SaveLog(long filesize, double transfertTime,TimeSpan cryptotime,Config config)
         {
-
+            await semaphore.WaitAsync();
 
             string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(backupConfigFile, "config.json");
             string logFilePath = Path.Combine(backupConfigFile, "log.json");
+            
             var listLog = new List<LogJsonModel>();
 
             //vérification de l'existence du fichier
@@ -124,7 +178,8 @@ namespace EasySaveV2.Model
                         FileSize = (int)filesize,
                         TransfertTime = (int)transfertTime,
                         TimeStamp = DateTime.Now.ToString(),
-                    });
+                        CryptageTime = cryptotime.TotalMilliseconds.ToString()
+                });
 
                     string logjson = JsonConvert.SerializeObject(listLog);
                     File.WriteAllText(logFilePath, logjson);
@@ -153,8 +208,9 @@ namespace EasySaveV2.Model
                     FileTarget = config.TargetDirectory,
                     FileSize = (int)filesize,
                     TransfertTime = transfertTime,
-                    TimeStamp = DateTime.Now.ToString()
-                });
+                    TimeStamp = DateTime.Now.ToString(),
+                    CryptageTime = cryptotime.TotalMilliseconds.ToString()
+            });
 
                 // Sérialiser l'objet mis à jour en JSON
                 var updatedJson = JsonConvert.SerializeObject(log, NewtonsoftJson.Formatting.Indented);
@@ -162,8 +218,10 @@ namespace EasySaveV2.Model
                 // Écrire le JSON mis à jour dans le fichier
                 File.WriteAllText(logFilePath, updatedJson);
             }
-
-
+            
+          
+              semaphore.Release();
+           
 
         }
     }

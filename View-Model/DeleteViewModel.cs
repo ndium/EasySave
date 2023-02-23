@@ -23,6 +23,7 @@ namespace EasySaveV2.View_Model
 
         public List<Config> GetListConfig()
         {
+
             return logJsonModel.GetConfigFile(LocalPath);
         }
 

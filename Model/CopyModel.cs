@@ -38,6 +38,7 @@ namespace EasySaveV2.Model
             workName = config.BackupName;
             TotalBytes = 0;
             int oldProgress = 0;
+            int nbfiles = 0;
             var localWorker = sender as BackgroundWorker;
             localWorker.ReportProgress(0, string.Format($"{config.BackupName}"));
             // Effectuer la sauvegarde si possible
@@ -53,6 +54,7 @@ namespace EasySaveV2.Model
             string targetFile = config.TargetDirectory;
             var logJsonModel = new LogJsonModel();
             var statelog = new Statelog();
+            bool state = false;
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
@@ -63,7 +65,7 @@ namespace EasySaveV2.Model
                 if (!dir.Exists)
                 {
 
-                    bool state = true;
+                    
                     var fileinfo = new FileInfo(sourceFile);
                     var fileSize = fileinfo.Length;
                     if (!fileinfo.Exists)
@@ -82,7 +84,7 @@ namespace EasySaveV2.Model
                             // Boucle de lecture et d'écriture
                             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
-
+                                state = true;
                                 target.Write(buffer, 0, bytesRead);
                                 TotalBytes += bytesRead;
 
@@ -95,7 +97,7 @@ namespace EasySaveV2.Model
                                         localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
                                         oldProgress = _progress;
                                     }
-                                    statelog.SaveLog(fileSize, byteTimeElapsed, fileSize, 1, config, state);
+                                    statelog.SaveLog(fileSize, byteTimeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile,targetFile),config, state);
                                 }
                             }
 
@@ -106,7 +108,7 @@ namespace EasySaveV2.Model
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
 
-                    logJsonModel.SaveLog(fileSize, timeElapsed, config);
+                    logJsonModel.SaveLog(fileSize, timeElapsed, EncryptionFile(sourceFile,targetFile), config);
                     localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
 
 
@@ -128,14 +130,14 @@ namespace EasySaveV2.Model
 
                         watch.Stop();
                         double timeElapsed = watch.Elapsed.TotalSeconds;
-                        logJsonModel.SaveLog(totalSize, timeElapsed, config);
-                        statelog.SaveLog(totalSize, timeElapsed, 1, 1, config, true);
+                        logJsonModel.SaveLog(totalSize, timeElapsed,EncryptionFile(sourceFile,targetFile), config);
+                        statelog.SaveLog(totalSize, timeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile, targetFile), config, state);
                         localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
 
                     }
                     catch (Exception e)
                     {
-
+                        MessageBox.Show(e.ToString());
                     }
 
                 }
@@ -186,6 +188,7 @@ namespace EasySaveV2.Model
                 // Boucle de copie des fichiers
                 foreach (var fileInfo in filesPrioritized)
                 {
+                    nbfiles++;
 
                     var sourceFile = fileInfo.FullName;
                     var targetFile = Path.Combine(targetFolder, fileInfo.Name);
@@ -312,9 +315,11 @@ namespace EasySaveV2.Model
         }
 
         //Méthode qui gère le chiffrement de fichier un à un
-        public void EncryptionFile(string source, string destination)
+        public TimeSpan EncryptionFile(string source, string destination)
         {
             FileEncryptModel fileEncryptModel = new FileEncryptModel();
+            DateTime dateTimeStart= DateTime.Now;
+            
 
             foreach (Extension extension in fileEncryptModel.GetList())
             {
@@ -326,9 +331,12 @@ namespace EasySaveV2.Model
                     processCryptosoft.StartInfo.ArgumentList.Add(source);
                     processCryptosoft.StartInfo.ArgumentList.Add(destination);
                     processCryptosoft.Start();
+                   
                 }
             }
+            DateTime dateTimeEND = DateTime.Now;
 
+            return dateTimeEND.Subtract(dateTimeStart); ;
         }
     }
 }
