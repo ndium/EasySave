@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,8 +36,11 @@ namespace EasySaveV2.View
         {
             Thread myThread = Thread.CurrentThread;
             ProgressBar progressBar;
-            Label middle_label;
-
+            Label labelPercent;
+            Button stopButton;
+            Button playButton;
+            Button pauseButton;
+            StackPanel buttonStack;
 
             Dispatcher.Invoke(() =>
             {
@@ -49,17 +53,63 @@ namespace EasySaveV2.View
                 progressBar.Name = myThread.Name;
                 MyStackPanel.Children.Add(progressBar);
 
-                middle_label = new Label();
-                middle_label.Height = 30;
-                middle_label.HorizontalAlignment = HorizontalAlignment.Center;
-                middle_label.VerticalAlignment = VerticalAlignment.Center;
-                middle_label.FontSize = 18;
-                middle_label.Margin = new Thickness(20, -45, 20, 0);
-                middle_label.Name = $"{myThread.Name}label1";
-                MyStackPanel.Children.Add(middle_label);
+                labelPercent = new Label();
+                labelPercent.Height = 30;
+                labelPercent.HorizontalAlignment = HorizontalAlignment.Center;
+                labelPercent.VerticalAlignment = VerticalAlignment.Center;
+                labelPercent.FontSize = 18;
+                labelPercent.Margin = new Thickness(20, -45, 20, 0);
+                labelPercent.Name = $"{myThread.Name}label1";
+                MyStackPanel.Children.Add(labelPercent);
+
+                buttonStack = new StackPanel();
+                buttonStack.Orientation = Orientation.Horizontal;
+                buttonStack.HorizontalAlignment = HorizontalAlignment.Center;
+                MyStackPanel.Children.Add(buttonStack);
+
+                pauseButton = new Button();
+                pauseButton.Height = 30;
+                pauseButton.Width = 60;
+                pauseButton.Content = "Pause";
+                pauseButton.Click += (sender, args) =>
+                {
+                    Button button = sender as Button;
+                    switch (button.Content)
+                    {
+                        case "Pause":
+                            button.Content = "Resume";
+                            break;
+                        case "Resume":
+                            button.Content = "Pause";
+                            break;
+                    }
+                }; 
+                buttonStack.Children.Add(pauseButton);
+
+                stopButton = new Button();
+                stopButton.Height = 30;
+                stopButton.Width = 60;
+                stopButton.Content = "Stop";
+                stopButton.Click += (sender, args) =>
+                {
+
+                };
+                buttonStack.Children.Add(stopButton);
+
             });
 
         }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
 
         public void UpdateProgressBar(ProgressChangedEventArgs e)
         {
@@ -72,11 +122,11 @@ namespace EasySaveV2.View
                 {
                     progressBar = child as ProgressBar;
                     progressBar.Value = e.ProgressPercentage;
-                    
 
-                    
+
+
                 }
-                else if((child as FrameworkElement)?.Name == $"{e.UserState}label1")
+                else if ((child as FrameworkElement)?.Name == $"{e.UserState}label1")
                 {
                     middle_label = child as Label;
                     middle_label.Content = $"{progressBar.Value}%";

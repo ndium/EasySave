@@ -34,9 +34,9 @@ namespace EasySaveV2.Model
             string logFilePath = Path.Combine(backupConfigFile, "statelog.json");
 
             //vérification de l'existence du fichier
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\statelog.json"))
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2\statelog.json"))
             {
-                using (StreamWriter sw = File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Easysave\statelog.json"))
+                using (StreamWriter sw = File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasysaveV2\statelog.json"))
                 {
                     sw.Write("[]");
                 }

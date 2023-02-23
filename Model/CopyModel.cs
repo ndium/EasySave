@@ -18,14 +18,15 @@ namespace EasySaveV2.Model
 {
     public class CopyModel
     {
-
+        private string workName { get; set; }
         private int _progress { get; set; }
         private long TotalBytes { get; set; }
 
 
 
-        public void FullCopy(Config config, object sender)
+        public async void FullCopy(Config config, object sender)
         {
+            workName = config.BackupName;
             TotalBytes = 0;
             int oldProgress = 0;
             var localWorker = sender as BackgroundWorker;
@@ -48,15 +49,13 @@ namespace EasySaveV2.Model
             if (sourceFile != null)
             {
                 var dir = new DirectoryInfo(sourceFile);
-
+                //Passe dans la boucle si il s'agit d'un simple fichier
                 if (!dir.Exists)
                 {
 
                     bool state = true;
                     var fileinfo = new FileInfo(sourceFile);
-                    string filename = Path.GetFileName(sourceFile);
                     var fileSize = fileinfo.Length;
-                    targetFile = Path.Combine(targetFile, filename);
                     if (!fileinfo.Exists)
                         throw new FileNotFoundException($"{sourceFile} does not exist");
                     using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
@@ -66,7 +65,7 @@ namespace EasySaveV2.Model
                             // Allocation d'un buffer de lecture de 4 Ko
                             var buffer = new byte[4096];
                             int bytesRead;
-                           
+
                             Stopwatch stopwatch = new Stopwatch();
                             stopwatch.Start();
                             double byteTimeElapsed = 0;
@@ -79,24 +78,30 @@ namespace EasySaveV2.Model
 
                                 // Calcul de la progression
                                 _progress = (int)((TotalBytes / (double)fileSize) * 100);
-                                if (oldProgress != _progress)
+                                if (_progress != 100)
                                 {
-                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
-                                    oldProgress = _progress;
+                                    if (oldProgress != _progress)
+                                    {
+                                        localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                        oldProgress = _progress;
+                                    }
+                                    statelog.SaveLog(fileSize, byteTimeElapsed, fileSize, 1, config, state);
                                 }
-                                statelog.SaveLog(fileSize, byteTimeElapsed, fileSize, 1, config, state);
-
                             }
 
                         }
                     }
+
+                     EncryptionRecursiveFile(null, sourceFile, targetFile);
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
 
                     logJsonModel.SaveLog(fileSize, timeElapsed, config);
+                    localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
 
 
                 }
+                //Sinon passe dans la boucle pour copier les dossiers
                 else
                 {
                     try
@@ -104,24 +109,12 @@ namespace EasySaveV2.Model
 
                         DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
                         long totalSize = GetDirectorySize(sourceFolderInfo);
-                        
 
-                        CopyDirectory(sourceFolderInfo, targetFile, totalSize);
 
-                        /*foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
-                        {
-                            var source = fileInfo.FullName;
-                            var target = Path.Combine(targetFile, fileInfo.Name);
-                            await EncryptionFile( source, target);
-                        }
+                        await CopyDirectory(sourceFolderInfo, targetFile, totalSize);
 
-                        foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
-                        {
-                            string newDestinationDir = Path.Combine(targetFile, subDir.Name);
-                            await EncryptionFile(sourceFile, newDestinationDir);
-                        }*/
 
-                        EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
+                         EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
 
                         watch.Stop();
                         double timeElapsed = watch.Elapsed.TotalSeconds;
@@ -140,20 +133,27 @@ namespace EasySaveV2.Model
 
             }
 
-            async Task EncryptionRecursiveFile(DirectoryInfo sourceFolderInfo, string sourceFile, string targetFile)
+            void EncryptionRecursiveFile(DirectoryInfo? sourceFolderInfo, string sourceFile, string targetFile)
             {
-                foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
+                if (sourceFolderInfo != null)
                 {
-                    var source = fileInfo.FullName;
-                    var target = Path.Combine(targetFile, fileInfo.Name);
-                    await EncryptionFile(source, target);
-                }
+                    foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
+                    {
+                        var source = fileInfo.FullName;
+                        var target = Path.Combine(targetFile, fileInfo.Name);
+                         EncryptionFile(source, target);
+                    }
 
-                foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
+                    foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
+                    {
+                        string newDestinationDir = Path.Combine(targetFile, subDir.Name);
+                        string newSource = Path.Combine(sourceFile, subDir.Name);
+                         EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
+                    }
+                }
+                else
                 {
-                    string newDestinationDir = Path.Combine(targetFile, subDir.Name);
-                    string newSource = Path.Combine(sourceFile, subDir.Name);
-                    await EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
+                     EncryptionFile(sourceFile, targetFile);
                 }
             }
 
@@ -168,7 +168,6 @@ namespace EasySaveV2.Model
 
                 // Création du dossier cible s'il n'existe pas
                 Directory.CreateDirectory(targetFolder);
-
 
                 // Boucle de copie des fichiers
                 foreach (var fileInfo in sourceDirectoryInfo.GetFiles())
@@ -193,9 +192,14 @@ namespace EasySaveV2.Model
                                 // Calcul de la progression
                                 _progress = (int)((TotalBytes / (double)totalSize) * 100);
 
-                                if (oldProgress != _progress)
-                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
-                                oldProgress = _progress;
+                                if (_progress != 100)
+                                {
+                                    if (oldProgress != _progress)
+                                    {
+                                        localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                        oldProgress = _progress;
+                                    }
+                                }
 
 
                             }
@@ -277,10 +281,14 @@ namespace EasySaveV2.Model
 
                                 // Calcul de la progression
                                 _progress = (int)((TotalBytes / (double)totalSize) * 100);
-
-                                if (oldProgress != _progress)
-                                    localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
-                                oldProgress = _progress;
+                                if (_progress != 100)
+                                {
+                                    if (oldProgress != _progress)
+                                    {
+                                        localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
+                                        oldProgress = _progress;
+                                    }
+                                }
 
                             }
 
@@ -322,7 +330,7 @@ namespace EasySaveV2.Model
         }
 
         //Méthode qui gère le chiffrement de fichier un à un
-        public async Task EncryptionFile(string source, string destination)
+        public void EncryptionFile(string source, string destination)
         {
             FileEncryptModel fileEncryptModel = new FileEncryptModel();
 

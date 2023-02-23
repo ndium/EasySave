@@ -84,42 +84,7 @@ namespace EasySaveV2.View
 
         private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
-            //switch (e.ProgressPercentage)
-            //{
-            //    case 10:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 20:
-            //        _loadingBar.UpdateProgressBar(e);
-
-            //        break;
-            //    case 30:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 40:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 50:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 60:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-
-            //    case 70:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 80:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 90:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-            //    case 100:
-            //        _loadingBar.UpdateProgressBar(e);
-            //        break;
-
-            //}
+            
             _loadingBar.UpdateProgressBar(e);
         }
 
