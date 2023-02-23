@@ -40,22 +40,21 @@ namespace EasySaveV2.Model
                 }
             }
 
-            // Chargement des données de taille enregistrées
-            string sizeJson = File.ReadAllText(Global.JSON_PATH + @"\size.json");
-            Size sizeData = JsonConvert.DeserializeObject<Size>(sizeJson);
-            double sizeLimit = sizeData.Valeur;
-
-
-            string SizePath = LocalPath + @"\Priority.json";
+            string SizePath = LocalPath + @"\size.json";
             FileInfo SizeInfo = new FileInfo(SizePath);
 
             if (!SizeInfo.Exists || SizeInfo.Length == 0)
             {
                 using (StreamWriter sw = File.CreateText(SizePath))
                 {
-                    sw.Write("[]");
+                    sw.Write("{\"Valeur\":100.0}");
                 }
             }
+
+            // Chargement des données de taille enregistrées
+            string sizeJson = File.ReadAllText(Global.JSON_PATH + @"\size.json");
+            Size sizeData = JsonConvert.DeserializeObject<Size>(sizeJson);
+            double sizeLimit = sizeData.Valeur;
 
             // Chargement des extensions prioritaires
             string priorityJson = File.ReadAllText(Global.JSON_PATH + @"\Priority.json");
