@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActualSize" xml:space="preserve">
+    <value>Actual Size</value>
+  </data>
   <data name="AddApp" xml:space="preserve">
     <value>Application's name</value>
   </data>
@@ -144,17 +147,23 @@
   <data name="Editbutton" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>An error has occurred</value>
+  </data>
   <data name="Error Daily Logs" xml:space="preserve">
     <value>An error occurred while recording the daily log:</value>
   </data>
   <data name="ErrorApp" xml:space="preserve">
-    <value>Save's Error</value>
+    <value>Error an application is running</value>
   </data>
   <data name="existingValue" xml:space="preserve">
     <value>Enter an existing value</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Enter extension</value>
+  </data>
+  <data name="ExtensionName" xml:space="preserve">
+    <value>Extension to be prioritised</value>
   </data>
   <data name="FifthOption" xml:space="preserve">
     <value>Language</value>
@@ -171,6 +180,9 @@
   <data name="Launch" xml:space="preserve">
     <value>Launch</value>
   </data>
+  <data name="ListExst" xml:space="preserve">
+    <value>Extension's List</value>
+  </data>
   <data name="MaxConf" xml:space="preserve">
     <value>The maximum threshold has been reached, please delete one of the backup jobs</value>
   </data>
@@ -183,6 +195,12 @@
   <data name="NotFound" xml:space="preserve">
     <value>The configuration was not found</value>
   </data>
+  <data name="RemoveApp" xml:space="preserve">
+    <value>App removed</value>
+  </data>
+  <data name="RemoveExt" xml:space="preserve">
+    <value>Extension removed</value>
+  </data>
   <data name="SaveApp" xml:space="preserve">
     <value>Application saved with success</value>
   </data>
@@ -191,6 +209,12 @@
   </data>
   <data name="SaveCreated" xml:space="preserve">
     <value>The backup work is created!</value>
+  </data>
+  <data name="SaveExtension" xml:space="preserve">
+    <value>Extension Save</value>
+  </data>
+  <data name="SaveSize" xml:space="preserve">
+    <value>Size Save</value>
   </data>
   <data name="SecondOption" xml:space="preserve">
     <value>Logs</value>
@@ -207,6 +231,9 @@
   <data name="SixthOption" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="Sizetext" xml:space="preserve">
+    <value>Enter the maximum size of the files to be backed up (ko)</value>
+  </data>
   <data name="sourceDirectory" xml:space="preserve">
     <value>Enter a Source path</value>
   </data>
@@ -220,6 +247,6 @@
     <value>Encryption</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Welcome !</value>
+    <value>Welcome to EasySave !</value>
   </data>
 </root>

@@ -41,7 +41,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"/>
 
-                <TextBlock Text="EasySaveV2"
+                <TextBlock Text="EasySaveV3"
                            Foreground="#FFFFFF"
                            FontFamily="{StaticResource Orbitron}"
                            FontStyle="Normal" 
@@ -78,7 +78,7 @@
 
 
                 </MenuItem>
-                
+
                 <MenuItem Foreground="#FFFFFF"
                           FontFamily="{StaticResource Roboto}" Height="35" Click="MenuItem_Click_1" VerticalAlignment="Top">
 
@@ -168,7 +168,20 @@
                    Margin="-2,-2,-2,-2"/>
         </Button>
         <Frame x:Name="MySaves" NavigationUIVisibility="Hidden" Margin="230,0,0,0" Navigated="MySaves_Navigated"/>
-       
+        <TextBox Name="WelcomeEasySave" 
+         Foreground="#FFFFFF" 
+         Background="#14213D" 
+         HorizontalAlignment="Center" 
+         TextAlignment="Center" 
+         TextWrapping="Wrap" 
+         VerticalAlignment="Center" 
+         Width="518" 
+         Height="250"
+         FontSize="24"
+         FontWeight="Bold"
+         BorderThickness="0"
+         IsReadOnly="True"/>
+
 
     </Grid>
 </Window>

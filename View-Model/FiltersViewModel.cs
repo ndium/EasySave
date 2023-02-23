@@ -9,25 +9,53 @@ namespace EasySaveV2.View_Model
 {
     public class FiltersViewModel
     {
-        public BusinessAppModel _businessAppModel { get; set; }
+        public FiltersModel _filtersModel { get; set; }
         public FiltersViewModel() 
         {
-            _businessAppModel= new BusinessAppModel();
+            _filtersModel= new FiltersModel();
         }
 
         public void SaveApp(string AppName)
         {
-            _businessAppModel.SaveApp(AppName);
+            _filtersModel.SaveApp(AppName);
+        }
+        public void SaveSize(double Size)
+        {
+            _filtersModel.SaveSize(Size);
+        }
+
+        public void Priority(string Extension)
+        {
+            _filtersModel.Priority(Extension);
         }
 
         public bool AppExists(string AppName) 
         {
-            return _businessAppModel.AppExists(AppName);
+            return _filtersModel.AppExists(AppName);
         }
 
         public string GetJson()
         {
-            return _businessAppModel.GetJson();
+            return _filtersModel.GetJson();
+        }
+        public string GetSizeJson()
+        {
+            return _filtersModel.GetSizeJson();
+        }
+        public string GetExtJson()
+        {
+            return _filtersModel.GetExtJson();
+        }
+
+        
+        public void RemoveApp(string AppName)
+        {
+            _filtersModel.RemoveApp(AppName);
+        }
+        public void RemoveExt(string Extension)
+        {
+            _filtersModel.RemoveExt(Extension);
         }
     }
+    
 }

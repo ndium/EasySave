@@ -2,6 +2,7 @@
 using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,9 +29,8 @@ namespace EasySaveV2.View
             _mainWindow = mainWindow;
             InitializeComponent();
             DataContext = this;
-            Translation();
+            Translation();        
         }
-
 
         public void Translation()
         {
@@ -43,7 +43,7 @@ namespace EasySaveV2.View
         {
             LangViewModel langViewModel = new LangViewModel();
             langViewModel.ChangeLanguageVM("en");
-
+            Translation();
             _mainWindow.Translation();
         }
 
@@ -51,7 +51,7 @@ namespace EasySaveV2.View
         {
             LangViewModel langViewModel = new LangViewModel();
             langViewModel.ChangeLanguageVM("fr");
-
+            Translation();
             _mainWindow.Translation();
         }
     }

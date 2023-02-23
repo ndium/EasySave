@@ -13,6 +13,10 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
+using EasySaveV2.View;
+using System.Windows.Automation.Peers;
+using System.Dynamic;
+using EasySaveV2.View_Model;
 
 namespace EasySaveV2.Model
 {
@@ -22,7 +26,12 @@ namespace EasySaveV2.Model
         private int _progress { get; set; }
         private long TotalBytes { get; set; }
 
+        private FiltersModel _filtersModel;
 
+        public CopyModel()
+        {
+            _filtersModel = new FiltersModel();
+        }
 
         public async void FullCopy(Config config, object sender)
         {
@@ -32,9 +41,10 @@ namespace EasySaveV2.Model
             var localWorker = sender as BackgroundWorker;
             localWorker.ReportProgress(0, string.Format($"{config.BackupName}"));
             // Effectuer la sauvegarde si possible
-            if (!CheckBusinessApp())
+            if (!_filtersModel.CheckBusinessApp())
             {
-                throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                LangHelper langHelper = new LangHelper();
+                throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
 
             }
 
@@ -159,18 +169,22 @@ namespace EasySaveV2.Model
 
             async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize)
             {
+                
                 var localWorker = sender as BackgroundWorker;
                 localWorker.ReportProgress(0, string.Format("0"));
-                if (!CheckBusinessApp())
+                if (!_filtersModel.CheckBusinessApp())
                 {
-                    throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                    LangHelper langHelper = new LangHelper();
+                    throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
                 }
 
                 // Création du dossier cible s'il n'existe pas
                 Directory.CreateDirectory(targetFolder);
+                var test = sourceDirectoryInfo.GetFiles();
+                List<FileInfo> filesPrioritized = _filtersModel.CheckSizeAndPriority(sourceDirectoryInfo.FullName);
 
                 // Boucle de copie des fichiers
-                foreach (var fileInfo in sourceDirectoryInfo.GetFiles())
+                foreach (var fileInfo in filesPrioritized)
                 {
 
                     var sourceFile = fileInfo.FullName;
@@ -208,12 +222,6 @@ namespace EasySaveV2.Model
                     }
 
                 }
-
-
-
-
-
-
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
@@ -244,7 +252,7 @@ namespace EasySaveV2.Model
             int TotalBytes = 0;
             int oldProgress = 0;
             var localWorker = sender as BackgroundWorker;
-            if (CheckBusinessApp())
+            if (_filtersModel.CheckBusinessApp())
             {
                 string sourceFolder = config.SourceDirectory;
                 string targetFolder = config.TargetDirectory;
@@ -298,35 +306,9 @@ namespace EasySaveV2.Model
             }
             else
             {
-                throw new Exception("Impossible de sauvegarder car une des applications enregistrées est en cours d'exécution");
+                LangHelper langHelper = new LangHelper();
+                throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
             }
-        }
-
-        public bool CheckBusinessApp()
-        {
-            // Charger les applications à partir du fichier JSON
-
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
-            string file = Path.Combine(appPath, "applications.json");
-            if (!File.Exists(file))
-            {
-                return true;
-            }
-            string json = File.ReadAllText(file);
-            List<BusinessApp> applications = JsonConvert.DeserializeObject<List<BusinessApp>>(json);
-
-            // Vérifier si les applications sont ouvertes
-            bool canSave = true;
-            foreach (var application in applications)
-            {
-                Process[] processList = Process.GetProcessesByName(application.AppName);
-                if (processList.Length > 0)
-                {
-                    canSave = false;
-                    break;
-                }
-            }
-            return canSave;
         }
 
         //Méthode qui gère le chiffrement de fichier un à un
