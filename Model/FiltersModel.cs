@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -28,10 +29,33 @@ namespace EasySaveV2.Model
 
         public List<FileInfo> CheckSizeAndPriority(string sourceFolder)
         {
+            string PriorityPath = LocalPath + @"\Priority.json";
+            FileInfo PriorityInfo = new FileInfo(PriorityPath);
+
+            if (!PriorityInfo.Exists || PriorityInfo.Length == 0)
+            {
+                using (StreamWriter sw = File.CreateText(PriorityPath))
+                {
+                    sw.Write("[]");
+                }
+            }
+
             // Chargement des données de taille enregistrées
             string sizeJson = File.ReadAllText(Global.JSON_PATH + @"\size.json");
             Size sizeData = JsonConvert.DeserializeObject<Size>(sizeJson);
             double sizeLimit = sizeData.Valeur;
+
+
+            string SizePath = LocalPath + @"\Priority.json";
+            FileInfo SizeInfo = new FileInfo(SizePath);
+
+            if (!SizeInfo.Exists || SizeInfo.Length == 0)
+            {
+                using (StreamWriter sw = File.CreateText(SizePath))
+                {
+                    sw.Write("[]");
+                }
+            }
 
             // Chargement des extensions prioritaires
             string priorityJson = File.ReadAllText(Global.JSON_PATH + @"\Priority.json");
@@ -251,7 +275,7 @@ namespace EasySaveV2.Model
             {
                 using (StreamWriter sw = File.CreateText(LocalPath + @"\size.json"))
                 {
-                    sw.Write("[]");
+                    sw.Write("{\"Valeur\":100.0}");
                 }
             }
 
