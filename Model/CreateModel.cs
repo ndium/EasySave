@@ -21,26 +21,22 @@ namespace EasySaveV2.Model
 
         public void CreateSave (Config config )
         {
-            
-                
-               
+            var backupConfigs = new List<Config>();
+            string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
 
-                var backupConfigs = new List<Config>();
-                string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
+            if (!Directory.Exists(backupConfigFile))
+            {
+                Directory.CreateDirectory(backupConfigFile);
+            }
 
-                if (!Directory.Exists(backupConfigFile))
-                {
-                    Directory.CreateDirectory(backupConfigFile);
-                }
+            string file = Path.Combine(backupConfigFile, "config.json");
 
-                string file = Path.Combine(backupConfigFile, "config.json");
-
-                if (File.Exists(file))
-                {
-                    backupConfigs = JsonConvert.DeserializeObject<List<Config>>(File.ReadAllText(file));
-                }
-                backupConfigs.Add(config);
-                File.WriteAllText(file, JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));
+            if (File.Exists(file))
+            {
+                backupConfigs = JsonConvert.DeserializeObject<List<Config>>(File.ReadAllText(file));
+            }
+            backupConfigs.Add(config);
+            File.WriteAllText(file, JsonConvert.SerializeObject(backupConfigs, Formatting.Indented));
         }
     }
 }
