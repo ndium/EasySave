@@ -46,6 +46,7 @@ namespace EasySaveV2.View
             EditButton.Content = $"{langHelper._rm.GetString("Editbutton")}";
             DeleteButton.Content = $"{langHelper._rm.GetString("DeleteButton")}";
             launchButton.Content = $"{langHelper._rm.GetString("Launch")}";
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

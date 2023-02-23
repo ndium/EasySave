@@ -122,6 +122,7 @@ namespace EasySaveV2
             Filters.Text = $"{langHelper._rm.GetString("FourthOption")}";
             Language.Text = $"{langHelper._rm.GetString("FifthOption")}";
             Exit.Text = $"{langHelper._rm.GetString("SixthOption")}";
+            WelcomeEasySave.Text = $"{langHelper._rm.GetString("Welcome")}";
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -145,12 +146,14 @@ namespace EasySaveV2
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MySaves.Content = new SavesView();
+            WelcomeEasySave.Visibility = Visibility.Collapsed;
         }
 
         //bouton log
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             MySaves.Content = new LogsView();
+            WelcomeEasySave.Visibility = Visibility.Collapsed;
         }
 
         //bouton close
@@ -168,16 +171,19 @@ namespace EasySaveV2
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
             MySaves.Content = new FileEncryptView();
+            WelcomeEasySave.Visibility = Visibility.Collapsed;
         }
 
         private void NewApplicationMenuItem_Click(object sender, RoutedEventArgs e)
         {
             MySaves.Content = new FiltersView();
+            WelcomeEasySave.Visibility = Visibility.Collapsed;
         }
 
         private void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
             MySaves.Content = new LanguageView(this);
+            WelcomeEasySave.Visibility = Visibility.Collapsed;
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

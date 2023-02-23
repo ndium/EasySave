@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActualSize" xml:space="preserve">
+    <value>Taille Actuelle</value>
+  </data>
   <data name="AddApp" xml:space="preserve">
     <value>Application que vous souhaitez ajouter</value>
   </data>
@@ -144,17 +147,23 @@
   <data name="Editbutton" xml:space="preserve">
     <value>Modifier</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Une erreur est survenue</value>
+  </data>
   <data name="Error Daily Logs" xml:space="preserve">
     <value>Une erreur s'est produite lors de l'enregistrement du log journalier:</value>
   </data>
   <data name="ErrorApp" xml:space="preserve">
-    <value>Erreur lors de la sauvegarde :</value>
+    <value>Erreur : Une application est ouverte</value>
   </data>
   <data name="existingValue" xml:space="preserve">
     <value>Renseignez une valeur existante :</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Saisissez les extensions</value>
+  </data>
+  <data name="ExtensionName" xml:space="preserve">
+    <value>Extension à prioriser</value>
   </data>
   <data name="FifthOption" xml:space="preserve">
     <value>Langage</value>
@@ -171,6 +180,9 @@
   <data name="Launch" xml:space="preserve">
     <value>Lancer Sélection</value>
   </data>
+  <data name="ListExst" xml:space="preserve">
+    <value>Liste des extensions</value>
+  </data>
   <data name="MaxConf" xml:space="preserve">
     <value>Le seuil maximum est atteint, veuillez supprimer l'un des travaux de sauvegarde</value>
   </data>
@@ -183,6 +195,12 @@
   <data name="NotFound" xml:space="preserve">
     <value>La configuration n'a pas été trouvée</value>
   </data>
+  <data name="RemoveApp" xml:space="preserve">
+    <value>Application supprimée</value>
+  </data>
+  <data name="RemoveExt" xml:space="preserve">
+    <value>Extension supprimée</value>
+  </data>
   <data name="SaveApp" xml:space="preserve">
     <value>Application sauvegardée avec succès</value>
   </data>
@@ -191,6 +209,12 @@
   </data>
   <data name="SaveCreated" xml:space="preserve">
     <value>Le travaux de sauvegarde est créé !</value>
+  </data>
+  <data name="SaveExtension" xml:space="preserve">
+    <value>Extension enregistrée</value>
+  </data>
+  <data name="SaveSize" xml:space="preserve">
+    <value>Taille enregistrée</value>
   </data>
   <data name="SecondOption" xml:space="preserve">
     <value>Logs</value>
@@ -207,6 +231,9 @@
   <data name="SixthOption" xml:space="preserve">
     <value>Quitter</value>
   </data>
+  <data name="Sizetext" xml:space="preserve">
+    <value>Enter la taille maximum des fichiers à sauvegarder (ko)</value>
+  </data>
   <data name="sourceDirectory" xml:space="preserve">
     <value>Renseignez un chemin source :</value>
   </data>
@@ -220,6 +247,6 @@
     <value>Cryptage</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Bienvenue !</value>
+    <value>Bienvenue dans EasySave !</value>
   </data>
 </root>
