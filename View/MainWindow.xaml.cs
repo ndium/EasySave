@@ -20,7 +20,7 @@ using System.Threading;
 using System.Diagnostics.Metrics;
 using System.ComponentModel;
 
-namespace EasySaveV2
+namespace EasySaveV2.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -107,6 +107,7 @@ namespace EasySaveV2
                 MessageBox.Show("L'application est déjà en cours d'exécution.");
                 Application.Current.Shutdown();
             }
+            Server server = new Server();
         }
         private void RaisePropertyChanged(string propName)
         {
