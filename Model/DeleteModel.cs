@@ -19,7 +19,7 @@ namespace EasySaveV2.Model
 
 
 
-        public void DeleteSave(List<Config> configsToDelete)
+        public async Task DeleteSave(List<Config> configsToDelete)
         {
             if (configsToDelete == null)
             {

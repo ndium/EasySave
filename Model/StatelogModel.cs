@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 
@@ -12,11 +13,13 @@ namespace EasySaveV2.Model
 {
     public class Statelog : LogJsonModel
     {
+        private SemaphoreSlim semaphore = new SemaphoreSlim(1);
         public string State { get; set; }
         public int TotalFilesToCopy = 0;
         public long TotalFilesSize = 0;
         public int totalNbFilesleftToDo = 0;
         public int Progression = 0;
+        
 
 
 
@@ -25,9 +28,9 @@ namespace EasySaveV2.Model
 
 
 
-        public void SaveLog(long filesize, double transfertTime, long totalfilessize, int totalnbfiles, Config config, bool IsActived)
+        public async Task SaveLog(long filesize, double transfertTime, long totalfilessize, int totalnbfiles,TimeSpan cryptotime, Config config, bool IsActived)
         {
-
+            await semaphore.WaitAsync();
             string backupConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
             string file = Path.Combine(backupConfigFile, "config.json");
             List<Statelog> listLog = new List<Statelog>();
@@ -66,7 +69,8 @@ namespace EasySaveV2.Model
                         TotalFilesToCopy = totalnbfiles,
                         TotalFilesSize = totalfilessize,
                         totalNbFilesleftToDo = totalnbfiles,
-                        Progression = (int)totalfilessize
+                        Progression = (int)totalfilessize,
+                        CryptageTime = cryptotime.TotalMilliseconds.ToString()
 
 
 
@@ -84,15 +88,16 @@ namespace EasySaveV2.Model
                         TransfertTime = (int)transfertTime,
                         TimeStamp = DateTime.Now.ToString(),
                         State = "END",
-                    });
+                        CryptageTime = cryptotime.TotalMilliseconds.ToString()
+                     });
                 }
                 // Sérialiser l'objet mis à jour en JSON
                 var updatedJson = JsonConvert.SerializeObject(listLog, Formatting.Indented);
 
                 // Écrire le JSON mis à jour dans le fichier
                 File.WriteAllText(logFilePath, updatedJson);
-            
 
+            semaphore.Release();
         }
 
     }
