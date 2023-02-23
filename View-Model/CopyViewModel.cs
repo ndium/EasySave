@@ -1,4 +1,4 @@
-﻿using EasySaveV2.Model;
+using EasySaveV2.Model;
 using EasySaveV2.View;
 using EasySaveV2.View;
 using System;
@@ -25,26 +25,36 @@ namespace EasySaveV2.View_Model
         public CopyViewModel()
         {
             LocalPath = Global.JSON_PATH;
-            _copyModel = new CopyModel();
         }
 
-       
+
 
 
         public void GetCopyModel(Config config, object sender)
         {
-            
-                    if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
-                    {
-                        _copyModel.FullCopy(config, sender);
-                    }
-                    else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
-                    {
-                        _copyModel.DifferentialCopy(config, sender);
-                    }
+            _copyModel = new CopyModel();
+
+            if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
+            {
+                _copyModel.FullCopy(config, sender);
+            }
+            else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
+            {
+                _copyModel.DifferentialCopy(config, sender);
+            }
 
         }
 
+        public async Task PauseThread(string ThreadName)
+        {
+            foreach (CopyModel model in CopyModel.copyModels)
+            {
+                if (model.workName == ThreadName)
+                {
+                    await model.PauseCurrentThread();
+                }
+            }
+        }
 
         public async Task<Config> GetConfigInfo(int index)
         {

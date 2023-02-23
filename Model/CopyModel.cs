@@ -22,9 +22,11 @@ namespace EasySaveV2.Model
 {
     public class CopyModel
     {
-        private string workName { get; set; }
+        public string workName { get; set; }
         private int _progress { get; set; }
         private long TotalBytes { get; set; }
+        public static List<CopyModel> copyModels = new List<CopyModel>();
+        private bool isPaused { get; set; }
 
         private FiltersModel _filtersModel;
 
@@ -36,6 +38,7 @@ namespace EasySaveV2.Model
         public async void FullCopy(Config config, object sender)
         {
             workName = config.BackupName;
+            copyModels.Add(this);
             TotalBytes = 0;
             int oldProgress = 0;
             int nbfiles = 0;
@@ -104,7 +107,7 @@ namespace EasySaveV2.Model
                         }
                     }
 
-                     EncryptionRecursiveFile(null, sourceFile, targetFile);
+                    EncryptionRecursiveFile(null, sourceFile, targetFile);
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
 
@@ -126,7 +129,7 @@ namespace EasySaveV2.Model
                         await CopyDirectory(sourceFolderInfo, targetFile, totalSize);
 
 
-                         EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
+                        EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
 
                         watch.Stop();
                         double timeElapsed = watch.Elapsed.TotalSeconds;
@@ -142,7 +145,7 @@ namespace EasySaveV2.Model
 
                 }
 
-
+                copyModels.Remove(this);
             }
 
             void EncryptionRecursiveFile(DirectoryInfo? sourceFolderInfo, string sourceFile, string targetFile)
@@ -153,19 +156,19 @@ namespace EasySaveV2.Model
                     {
                         var source = fileInfo.FullName;
                         var target = Path.Combine(targetFile, fileInfo.Name);
-                         EncryptionFile(source, target);
+                        EncryptionFile(source, target);
                     }
 
                     foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
                     {
                         string newDestinationDir = Path.Combine(targetFile, subDir.Name);
                         string newSource = Path.Combine(sourceFile, subDir.Name);
-                         EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
+                        EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
                     }
                 }
                 else
                 {
-                     EncryptionFile(sourceFile, targetFile);
+                    EncryptionFile(sourceFile, targetFile);
                 }
             }
 
@@ -223,7 +226,13 @@ namespace EasySaveV2.Model
 
                         }
                     }
-
+                    if (isPaused)
+                    {
+                        while (isPaused)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
                 }
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
@@ -305,6 +314,14 @@ namespace EasySaveV2.Model
 
                         }
                     }
+
+                    if (isPaused)
+                    {
+                        while (isPaused)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
                 }
             }
             else
@@ -337,6 +354,18 @@ namespace EasySaveV2.Model
             DateTime dateTimeEND = DateTime.Now;
 
             return dateTimeEND.Subtract(dateTimeStart); ;
+        }
+
+        public async Task PauseCurrentThread()
+        {
+            if(isPaused)
+            {
+                isPaused = false;
+            }
+            else
+            {
+                isPaused = true;
+            }
         }
     }
 }

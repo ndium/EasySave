@@ -1,5 +1,6 @@
 ﻿
 
+using EasySaveV2.Model;
 using EasySaveV2.View_Model;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,12 @@ namespace EasySaveV2.View
     /// </summary>
     public partial class LoadingBar : Window
     {
+        CopyViewModel _copyViewModel;
         public LoadingBar()
         {
             InitializeComponent();
             DataContext = this;
+            _copyViewModel = new CopyViewModel();
 
 
         }
@@ -37,8 +40,8 @@ namespace EasySaveV2.View
             Thread myThread = Thread.CurrentThread;
             ProgressBar progressBar;
             Label labelPercent;
+            Label labelName;
             Button stopButton;
-            Button playButton;
             Button pauseButton;
             StackPanel buttonStack;
 
@@ -52,6 +55,18 @@ namespace EasySaveV2.View
                 progressBar.Margin = new Thickness(10, 10, 10, 10);
                 progressBar.Name = myThread.Name;
                 MyStackPanel.Children.Add(progressBar);
+
+                labelName = new Label();
+                labelName.Height = 30;
+                labelName.HorizontalAlignment = HorizontalAlignment.Left;
+                labelName.VerticalAlignment = VerticalAlignment.Center;
+                labelName.FontSize = 15;
+                labelName.Margin = new Thickness(60, -40, 20, 0);
+                labelName.Content = myThread.Name;
+                labelName.Name = myThread.Name + "Title";
+                labelName.Foreground = Brushes.White;
+                labelName.MaxWidth = 50;
+                MyStackPanel.Children.Add(labelName);
 
                 labelPercent = new Label();
                 labelPercent.Height = 30;
@@ -70,30 +85,17 @@ namespace EasySaveV2.View
                 pauseButton = new Button();
                 pauseButton.Height = 30;
                 pauseButton.Width = 60;
-                pauseButton.Content = "Pause";
-                pauseButton.Click += (sender, args) =>
-                {
-                    Button button = sender as Button;
-                    switch (button.Content)
-                    {
-                        case "Pause":
-                            button.Content = "Resume";
-                            break;
-                        case "Resume":
-                            button.Content = "Pause";
-                            break;
-                    }
-                }; 
+                pauseButton.Content = $"Pause";
+                pauseButton.Name = $"Pause{myThread.Name}";
+                pauseButton.Click += PauseButton_Click;
                 buttonStack.Children.Add(pauseButton);
 
                 stopButton = new Button();
                 stopButton.Height = 30;
                 stopButton.Width = 60;
-                stopButton.Content = "Stop";
-                stopButton.Click += (sender, args) =>
-                {
-
-                };
+                stopButton.Content = $"Stop";
+                stopButton.Name = $"Stop{myThread.Name}";
+                stopButton.Click += StopButton_Click;
                 buttonStack.Children.Add(stopButton);
 
             });
@@ -102,11 +104,26 @@ namespace EasySaveV2.View
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            Button button = sender as Button;
+            string ConfigName = button.Name.Replace("Stop", "");
+
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Button button = sender as Button;
+            string ConfigName = button.Name.Replace("Pause", "");
+            switch (button.Content)
+            {
+                case "Pause":
+                    _copyViewModel.PauseThread(ConfigName);
+                    button.Content = "Resume";
+                    break;
+                case "Resume":
+                    button.Content = "Pause";
+                    _copyViewModel.PauseThread(ConfigName);
+                    break;
+            }
 
         }
 
