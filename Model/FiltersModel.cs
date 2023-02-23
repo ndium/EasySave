@@ -102,7 +102,15 @@ namespace EasySaveV2.Model
             {
                 Directory.CreateDirectory(LocalPath);
             }
-            
+
+            if (!File.Exists(LocalPath + @"\size.json"))
+            {
+                using (StreamWriter sw = File.CreateText(LocalPath + @"\size.json"))
+                {
+                    sw.Write("[]");
+                }
+            }
+
             Size size = new Size();
             size.Valeur = Size;
             string file = Path.Combine(LocalPath, "size.json");
@@ -302,6 +310,14 @@ namespace EasySaveV2.Model
             if (!Directory.Exists(LocalPath))
             {
                 Directory.CreateDirectory(LocalPath);
+            }
+
+            if (!File.Exists(LocalPath + @"\Priority.json"))
+            {
+                using (StreamWriter sw = File.CreateText(LocalPath + @"\Priority.json"))
+                {
+                    sw.Write("[]");
+                }
             }
 
             string file = Path.Combine(LocalPath, "Priority.json");
