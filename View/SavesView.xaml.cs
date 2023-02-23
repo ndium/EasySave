@@ -83,6 +83,38 @@ namespace EasySaveV2.View
 
         }
 
+        public void ServerStartSave(List<Config> configs)
+        {
+
+            _loadingBar = new LoadingBar();
+            _loadingBar.Show();
+            _loadingBar.Activate();
+            _loadingBar.Focus();
+
+
+            foreach (var item in SaveGrid.SelectedItems)
+            {
+                if (item is Config config)
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        Thread thread = new Thread(_loadingBar.AddProgressBar);
+                        thread.Name = config.BackupName;
+                        thread.Start();
+                    });
+
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+                    worker.WorkerReportsProgress = true;
+                    worker.WorkerSupportsCancellation = true;
+                    worker.DoWork += Worker_DoWork;
+                    worker.ProgressChanged += Worker_ProgressChanged;
+                    worker.RunWorkerAsync(argument: config);
+
+                }
+            }
+        }
+
         private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
             
