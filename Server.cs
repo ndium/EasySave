@@ -14,9 +14,12 @@ using System.IO;
 using System.Xml;
 using System.Net.Http;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows;
 using Newtonsoft.Json;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using EasySaveV2.View_Model;
+using System.Windows.Documents;
 
 namespace EasySaveV2
 {
@@ -26,6 +29,8 @@ namespace EasySaveV2
         private Socket clientSocket;
         private List<Config> listConfigs;
         private List<Config> listConfigsToCopy;
+        private SavesView savesView;
+        private CopyViewModel copyViewModel;
 
         public Server()
         {
@@ -63,7 +68,7 @@ namespace EasySaveV2
 
             //On alimente la liste de sauvegarde
             listConfigs = new List<Config>();
-            
+
             listConfigs = JsonConvert.DeserializeObject<List<Config>>(temp);
 
             messageBytes = Encoding.ASCII.GetBytes(temp);
@@ -75,9 +80,11 @@ namespace EasySaveV2
         private void listenClient()
         {
             CopyViewModel copyViewModel = new CopyViewModel();
+            bool boolPause = false;
 
             while (true)
             {
+                string resultat;
                 // Attendre de recevoir des données de la socket du client
                 byte[] buffer = new byte[4096];
                 int bytesRead = clientSocket.Receive(buffer);
@@ -90,7 +97,7 @@ namespace EasySaveV2
                     case "play":
                         // Attendre de recevoir l'indice de la sauvegarde à lancer
                         byte[] bufferPlay = new byte[4096];
-                        int bytesReadPlay = clientSocket.Receive(buffer);
+                        int bytesReadPlay = clientSocket.Receive(bufferPlay);
 
                         // Convertir les données reçues en une chaîne de caractères
                         string dataPlay = Encoding.ASCII.GetString(bufferPlay, 0, bytesReadPlay);
@@ -98,11 +105,106 @@ namespace EasySaveV2
                         listConfigsToCopy = new List<Config>();
                         listConfigsToCopy = JsonConvert.DeserializeObject<List<Config>>(dataPlay);
 
-                        //copyViewModel.GetCopyModel(listConfigsToCopy, null);
+                        if (Application.Current.Dispatcher.CheckAccess())
+                        {
+                            savesView = new SavesView();
+                            savesView.ServerStartSave(listConfigsToCopy);
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    savesView = new SavesView();
+                                    savesView.ServerStartSave(listConfigsToCopy);
+                                }
+                                    );
+                        }
+
+                        if (listConfigsToCopy.Count == 0)
+                        {
+                            // Envoyez un message au client
+                            resultat = "Aucune sauvegarde selectionnee";
+                        }
+                        else
+                        {
+                            // Envoyez un message au client
+                            resultat = "Sauvegarde lancee";
+
+                        }
+                        byte[] messageBytesPlay = System.Text.Encoding.ASCII.GetBytes(resultat);
+                        clientSocket.Send(messageBytesPlay);
                         break;
                     case "pause":
+                        // Attendre de recevoir l'indice de la sauvegarde à lancer
+                        byte[] bufferPause = new byte[4096];
+                        int bytesReadPause = clientSocket.Receive(bufferPause);
+
+                        // Convertir les données reçues en une chaîne de caractères
+                        string dataPause = Encoding.ASCII.GetString(bufferPause, 0, bytesReadPause);
+
+                        copyViewModel = new CopyViewModel();
+                        listConfigsToCopy = new List<Config>();
+                        listConfigsToCopy = JsonConvert.DeserializeObject<List<Config>>(dataPause);
+
+                        foreach (Config config in listConfigsToCopy)
+                        {
+                            copyViewModel.PauseThread(config.BackupName);
+                        }
+
+                        if (listConfigsToCopy.Count == 0)
+                        {
+                            // Envoyez un message au client
+                            resultat = "Aucune sauvegarde selectionnee";
+                        }
+                        else
+                        {
+                            if (!boolPause)
+                            {
+                                // Envoyez un message au client
+                                resultat = "Sauvegarde en pause";
+                                boolPause = true;
+                            }
+                            else
+                            {
+                                // Envoyez un message au client
+                                resultat = "Sauvegarde en cours";
+                                boolPause = false;
+                            }
+                        }
+                        byte[] messageBytesPause = System.Text.Encoding.ASCII.GetBytes(resultat);
+                        clientSocket.Send(messageBytesPause);
                         break;
                     case "stop":
+                        // Attendre de recevoir l'indice de la sauvegarde à lancer
+                        byte[] bufferStop = new byte[4096];
+                        int bytesReadStop = clientSocket.Receive(bufferStop);
+
+                        // Convertir les données reçues en une chaîne de caractères
+                        string dataStop = Encoding.ASCII.GetString(bufferStop, 0, bytesReadStop);
+
+                        //copyViewModel = new CopyViewModel();
+                        listConfigsToCopy = new List<Config>();
+                        listConfigsToCopy = JsonConvert.DeserializeObject<List<Config>>(dataStop);
+
+                        foreach (Config config in listConfigsToCopy)
+                        {
+                            //On arrete les threads de la list
+                            copyViewModel.StopThread(config.BackupName);
+                        }
+
+                        if (listConfigsToCopy.Count == 0)
+                        {
+                            // Envoyez un message au client
+                            resultat = "Aucune sauvegarde selectionnee";
+                        }
+                        else
+                        {
+                            // Envoyez un message au client
+                            resultat = "Sauvegarde arrete";
+                            
+                        }
+                        byte[] messageBytes = System.Text.Encoding.ASCII.GetBytes(resultat);
+                        clientSocket.Send(messageBytes);
                         break;
                     case "refresh":
                         break;

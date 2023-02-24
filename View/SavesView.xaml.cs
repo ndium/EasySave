@@ -92,7 +92,7 @@ namespace EasySaveV2.View
             _loadingBar.Focus();
 
 
-            foreach (var item in SaveGrid.SelectedItems)
+            foreach (var item in configs)
             {
                 if (item is Config config)
                 {
