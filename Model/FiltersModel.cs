@@ -113,9 +113,9 @@ namespace EasySaveV2.Model
             }
 
             // Ajout des fichiers dépassant la limite de taille à la fin de la liste
-            oversizedFiles.AddRange(filesToProcess);
+            filesToProcess.AddRange(oversizedFiles);
 
-            return oversizedFiles;
+            return filesToProcess;
         }
 
         public void SaveSize(double Size)
