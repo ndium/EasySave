@@ -1,0 +1,18 @@
+﻿<Page x:Class="EasySaveV2.View.LanguageView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:EasySaveV2.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="770"
+      Title="LanguageView">
+
+    <Grid Background="#14213D">
+        <Image Source="../Assets/Logos/english_flag.png" Margin="203,315,454,315"/>
+        <Image Source="../Assets/Logos/french_flag.png" Width="100" Height="60" Margin="469,320,201,320"/>
+        <Button Name="EnglishButton" HorizontalAlignment="Left" Margin="190,409,0,0" VerticalAlignment="Top" Height="35" Click="Button_Click"/>
+        <Button Name="FrenchButton" HorizontalAlignment="Left" Margin="451,409,0,0" VerticalAlignment="Top" Height="35" Click="Button_Click_1"/>
+
+    </Grid>
+</Page>
