@@ -105,7 +105,10 @@ namespace EasySaveV2.View
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+           
             string ConfigName = button.Name.Replace("Stop", "");
+            _copyViewModel.StopThread(ConfigName);
+
 
         }
 

@@ -142,7 +142,8 @@ namespace EasySaveV2.View
                 // |
                 // |
                 // V
-                throw ex;
+                var item = ex.Message.Replace("Stop", "");
+                throw new Exception($"{item} est arrété");
             }
         }
 
@@ -150,12 +151,13 @@ namespace EasySaveV2.View
         {
             if (e.Error != null)
             {
-                //MessageBox.Show(e.Error.Message);
+                MessageBox.Show(e.Error.Message);
 
             }
             else if (e.Cancelled)
             {
-                //MessageBox.Show("L'opération a été annulée.");
+                
+                MessageBox.Show("L'opération a été annulée.");
 
 
             }

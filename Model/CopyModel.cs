@@ -27,6 +27,7 @@ namespace EasySaveV2.Model
         private long TotalBytes { get; set; }
         public static List<CopyModel> copyModels = new List<CopyModel>();
         private bool isPaused { get; set; }
+        private bool isStopped { get; set; }
 
         private FiltersModel _filtersModel;
 
@@ -35,8 +36,9 @@ namespace EasySaveV2.Model
             _filtersModel = new FiltersModel();
         }
 
-        public async void FullCopy(Config config, object sender)
+        public async Task FullCopy(Config config, object sender)
         {
+            isStopped = false;
             workName = config.BackupName;
             copyModels.Add(this);
             TotalBytes = 0;
@@ -68,7 +70,7 @@ namespace EasySaveV2.Model
                 if (!dir.Exists)
                 {
 
-                    
+
                     var fileinfo = new FileInfo(sourceFile);
                     var fileSize = fileinfo.Length;
                     if (!fileinfo.Exists)
@@ -100,7 +102,7 @@ namespace EasySaveV2.Model
                                         localWorker.ReportProgress(_progress, string.Format($"{config.BackupName}"));
                                         oldProgress = _progress;
                                     }
-                                    statelog.SaveLog(fileSize, byteTimeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile,targetFile),config, state);
+                                    statelog.SaveLog(fileSize, byteTimeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile, targetFile), config, state);
                                 }
                             }
 
@@ -111,7 +113,7 @@ namespace EasySaveV2.Model
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
 
-                    logJsonModel.SaveLog(fileSize, timeElapsed, EncryptionFile(sourceFile,targetFile), config);
+                    logJsonModel.SaveLog(fileSize, timeElapsed, EncryptionFile(sourceFile, targetFile), config);
                     localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
 
 
@@ -119,29 +121,38 @@ namespace EasySaveV2.Model
                 //Sinon passe dans la boucle pour copier les dossiers
                 else
                 {
-                    try
+
+
+                    DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
+                    long totalSize = GetDirectorySize(sourceFolderInfo);
+
+                    if (isStopped)
                     {
-
-                        DirectoryInfo sourceFolderInfo = new DirectoryInfo(sourceFile);
-                        long totalSize = GetDirectorySize(sourceFolderInfo);
-
-
-                        await CopyDirectory(sourceFolderInfo, targetFile, totalSize);
-
-
-                        EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
-
-                        watch.Stop();
-                        double timeElapsed = watch.Elapsed.TotalSeconds;
-                        logJsonModel.SaveLog(totalSize, timeElapsed,EncryptionFile(sourceFile,targetFile), config);
-                        statelog.SaveLog(totalSize, timeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile, targetFile), config, state);
-                        localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
-
+                        copyModels.Remove(this);
+                        return;
                     }
-                    catch (Exception e)
+                    await CopyDirectory(sourceFolderInfo, targetFile, totalSize);
+
+                    if(isStopped)
                     {
-                        MessageBox.Show(e.ToString());
+                        copyModels.Remove(this);
+                        return;
                     }
+
+                    EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
+                    if (isStopped)
+                    {
+                        copyModels.Remove(this);
+                        return;
+                    }
+                    watch.Stop();
+                    double timeElapsed = watch.Elapsed.TotalSeconds;
+                    logJsonModel.SaveLog(totalSize, timeElapsed, EncryptionFile(sourceFile, targetFile), config);
+                    statelog.SaveLog(totalSize, timeElapsed, GetDirectorySize(dir), nbfiles, EncryptionFile(sourceFile, targetFile), config, state);
+                    localWorker.ReportProgress(100, string.Format($"{config.BackupName}"));
+
+
+
 
                 }
 
@@ -152,8 +163,16 @@ namespace EasySaveV2.Model
             {
                 if (sourceFolderInfo != null)
                 {
+                    if (isStopped)
+                    {
+                        return;
+                    }
                     foreach (FileInfo fileInfo in sourceFolderInfo.GetFiles())
                     {
+                        if (isStopped)
+                        {
+                            return;
+                        }
                         var source = fileInfo.FullName;
                         var target = Path.Combine(targetFile, fileInfo.Name);
                         EncryptionFile(source, target);
@@ -161,6 +180,10 @@ namespace EasySaveV2.Model
 
                     foreach (DirectoryInfo subDir in sourceFolderInfo.GetDirectories())
                     {
+                        if (isStopped)
+                        {
+                            return;
+                        }
                         string newDestinationDir = Path.Combine(targetFile, subDir.Name);
                         string newSource = Path.Combine(sourceFile, subDir.Name);
                         EncryptionRecursiveFile(subDir, newSource, newDestinationDir);
@@ -174,9 +197,8 @@ namespace EasySaveV2.Model
 
             async Task CopyDirectory(DirectoryInfo sourceDirectoryInfo, string targetFolder, long totalSize)
             {
-                
+
                 var localWorker = sender as BackgroundWorker;
-                localWorker.ReportProgress(0, string.Format("0"));
                 if (!_filtersModel.CheckBusinessApp())
                 {
                     LangHelper langHelper = new LangHelper();
@@ -191,6 +213,18 @@ namespace EasySaveV2.Model
                 // Boucle de copie des fichiers
                 foreach (var fileInfo in filesPrioritized)
                 {
+                    if (isPaused)
+                    {
+                        while (isPaused)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
+                    else if (isStopped)
+                    {
+                        return;
+                    }
+
                     nbfiles++;
 
                     var sourceFile = fileInfo.FullName;
@@ -233,12 +267,40 @@ namespace EasySaveV2.Model
                             Thread.Sleep(100);
                         }
                     }
+                    else if (isStopped)
+                    {
+                        return;
+                    }
                 }
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
+                    if (isPaused)
+                    {
+                        while (isPaused)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
+                    else if (isStopped)
+                    {
+                        return;
+                    }
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
                     CopyDirectory(subDir, newDestinationDir, totalSize);
+                   
                 }
+                if (isPaused)
+                {
+                    while (isPaused)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+                else if (isStopped)
+                {
+                    return;
+                }
+
             }
         }
         private static long GetDirectorySize(DirectoryInfo directoryInfo)
@@ -322,6 +384,12 @@ namespace EasySaveV2.Model
                             Thread.Sleep(100);
                         }
                     }
+                    else if (isStopped)
+                    {
+                        copyModels.Remove(this);
+                        return;
+                    }
+
                 }
             }
             else
@@ -335,8 +403,8 @@ namespace EasySaveV2.Model
         public TimeSpan EncryptionFile(string source, string destination)
         {
             FileEncryptModel fileEncryptModel = new FileEncryptModel();
-            DateTime dateTimeStart= DateTime.Now;
-            
+            DateTime dateTimeStart = DateTime.Now;
+
 
             foreach (Extension extension in fileEncryptModel.GetList())
             {
@@ -348,7 +416,7 @@ namespace EasySaveV2.Model
                     processCryptosoft.StartInfo.ArgumentList.Add(source);
                     processCryptosoft.StartInfo.ArgumentList.Add(destination);
                     processCryptosoft.Start();
-                   
+
                 }
             }
             DateTime dateTimeEND = DateTime.Now;
@@ -358,7 +426,7 @@ namespace EasySaveV2.Model
 
         public async Task PauseCurrentThread()
         {
-            if(isPaused)
+            if (isPaused)
             {
                 isPaused = false;
             }
@@ -366,6 +434,13 @@ namespace EasySaveV2.Model
             {
                 isPaused = true;
             }
+        }
+
+        public async Task StopCurrentThread()
+        {
+
+            isStopped = true;
+
         }
     }
 }

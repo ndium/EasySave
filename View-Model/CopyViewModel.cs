@@ -32,16 +32,24 @@ namespace EasySaveV2.View_Model
 
         public void GetCopyModel(Config config, object sender)
         {
-            _copyModel = new CopyModel();
+            try
+            {
+                _copyModel = new CopyModel();
 
-            if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
-            {
-                _copyModel.FullCopy(config, sender);
+                if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Complete)
+                {
+                    _copyModel.FullCopy(config, sender);
+                }
+                else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
+                {
+                    _copyModel.DifferentialCopy(config, sender);
+                }
             }
-            else if ((SaveType)Enum.Parse(typeof(SaveType), config.BackupType.ToString()) == SaveType.Differential)
+            catch(Exception ex)
             {
-                _copyModel.DifferentialCopy(config, sender);
+                throw ex;
             }
+           
 
         }
 
@@ -55,6 +63,19 @@ namespace EasySaveV2.View_Model
                 }
             }
         }
+
+        public async Task StopThread(string ThreadName)
+        {
+            
+                foreach (CopyModel model in CopyModel.copyModels)
+                {
+                    if (model.workName == ThreadName)
+                    {
+                        await model.StopCurrentThread();
+                    }
+                }
+            }
+            
 
         public async Task<Config> GetConfigInfo(int index)
         {
