@@ -19,7 +19,7 @@ namespace EasySaveV2.Model
         string LocalPath;
         public class Size
         {
-            public double Valeur { get; set; }
+            public double Value { get; set; }
         }
 
         public FiltersModel()
@@ -47,14 +47,14 @@ namespace EasySaveV2.Model
             {
                 using (StreamWriter sw = File.CreateText(SizePath))
                 {
-                    sw.Write("{\"Valeur\":100.0}");
+                    sw.Write("{\"Value\":100.0}");
                 }
             }
 
             // Chargement des données de taille enregistrées
             string sizeJson = File.ReadAllText(Global.JSON_PATH + @"\size.json");
             Size sizeData = JsonConvert.DeserializeObject<Size>(sizeJson);
-            double sizeLimit = sizeData.Valeur;
+            double sizeLimit = sizeData.Value;
 
             // Chargement des extensions prioritaires
             string priorityJson = File.ReadAllText(Global.JSON_PATH + @"\Priority.json");
@@ -113,9 +113,9 @@ namespace EasySaveV2.Model
             }
 
             // Ajout des fichiers dépassant la limite de taille à la fin de la liste
-            filesToProcess.AddRange(oversizedFiles);
+            oversizedFiles.AddRange(filesToProcess);
 
-            return filesToProcess;
+            return oversizedFiles;
         }
 
         public void SaveSize(double Size)
@@ -135,7 +135,7 @@ namespace EasySaveV2.Model
             }
 
             Size size = new Size();
-            size.Valeur = Size;
+            size.Value = Size;
             string file = Path.Combine(LocalPath, "size.json");
 
             File.WriteAllText(file, JsonConvert.SerializeObject(size));
@@ -274,7 +274,7 @@ namespace EasySaveV2.Model
             {
                 using (StreamWriter sw = File.CreateText(LocalPath + @"\size.json"))
                 {
-                    sw.Write("{\"Valeur\":100.0}");
+                    sw.Write("{\"Value\":100.0}");
                 }
             }
 
@@ -288,7 +288,7 @@ namespace EasySaveV2.Model
 
             // Supprimer les caractères spéciaux de la chaîne JSON
 
-            return data.Valeur.ToString();
+            return data.Value.ToString();
         }
 
         public string GetExtJson()
@@ -357,8 +357,8 @@ namespace EasySaveV2.Model
         {
             // Charger les applications à partir du fichier JSON
 
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2";
-            string file = Path.Combine(appPath, "applications.json");
+            
+            string file = Path.Combine(LocalPath, "applications.json");
             if (!File.Exists(file))
             {
                 return true;

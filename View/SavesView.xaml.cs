@@ -134,7 +134,7 @@ namespace EasySaveV2.View
                     return;
                 }
             }
-            catch (Exception ex)
+                catch (Exception ex)
             {
                 //On rejette l'erreur pour activer e.Error != null
                 //C'EST NORMAL QUE CA BLOQUE AU DEBUGGING !!!
@@ -143,7 +143,7 @@ namespace EasySaveV2.View
                 // |
                 // V
                 var item = ex.Message.Replace("Stop", "");
-                throw new Exception($"{item} est arrété");
+                throw new Exception($"{item}");
             }
         }
 

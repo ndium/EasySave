@@ -27,7 +27,7 @@ namespace EasySaveV2.Model
 
         public List<Extension> GetList()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySave\extension.json";
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\EasySaveV2\extension.json";
             if (!File.Exists(filePath))
             {
                 using (StreamWriter sw = File.CreateText(filePath))
