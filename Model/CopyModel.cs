@@ -36,7 +36,7 @@ namespace EasySaveV2.Model
             _filtersModel = new FiltersModel();
         }
 
-        public async Task FullCopy(Config config, object sender)
+        public void FullCopy(Config config, object sender)
         {
             isStopped = false;
             workName = config.BackupName;
@@ -47,13 +47,14 @@ namespace EasySaveV2.Model
             var localWorker = sender as BackgroundWorker;
             localWorker.ReportProgress(0, string.Format($"{config.BackupName}"));
             // Effectuer la sauvegarde si possible
+
             if (!_filtersModel.CheckBusinessApp())
             {
                 LangHelper langHelper = new LangHelper();
+                copyModels.Remove(this);
+
                 throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
-
             }
-
 
             string sourceFile = config.SourceDirectory;
             string targetFile = config.TargetDirectory;
@@ -72,7 +73,7 @@ namespace EasySaveV2.Model
 
 
                     var fileinfo = new FileInfo(sourceFile);
-                    var fileSize = fileinfo.Length;
+                    long fileSize = fileinfo.Length;
                     if (!fileinfo.Exists)
                         throw new FileNotFoundException($"{sourceFile} does not exist");
                     using (var source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
@@ -131,12 +132,26 @@ namespace EasySaveV2.Model
                         copyModels.Remove(this);
                         return;
                     }
-                    await CopyDirectory(sourceFolderInfo, targetFile, totalSize);
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
+
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
+                    }
+                    CopyDirectory(sourceFolderInfo, targetFile, totalSize);
 
                     if(isStopped)
                     {
                         copyModels.Remove(this);
                         return;
+                    }
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
+
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
                     }
 
                     EncryptionRecursiveFile(sourceFolderInfo, sourceFile, targetFile);
@@ -144,6 +159,13 @@ namespace EasySaveV2.Model
                     {
                         copyModels.Remove(this);
                         return;
+                    }
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
+
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
                     }
                     watch.Stop();
                     double timeElapsed = watch.Elapsed.TotalSeconds;
@@ -220,11 +242,17 @@ namespace EasySaveV2.Model
                             Thread.Sleep(100);
                         }
                     }
-                    else if (isStopped)
+                     if (isStopped)
                     {
                         return;
                     }
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
 
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
+                    }
                     nbfiles++;
 
                     var sourceFile = fileInfo.FullName;
@@ -267,10 +295,18 @@ namespace EasySaveV2.Model
                             Thread.Sleep(100);
                         }
                     }
-                    else if (isStopped)
+                    if (isStopped)
                     {
                         return;
                     }
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
+
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
+                    }
+
                 }
                 foreach (DirectoryInfo subDir in sourceDirectoryInfo.GetDirectories())
                 {
@@ -281,9 +317,16 @@ namespace EasySaveV2.Model
                             Thread.Sleep(100);
                         }
                     }
-                    else if (isStopped)
+                    if (isStopped)
                     {
                         return;
+                    }
+                    if (!_filtersModel.CheckBusinessApp())
+                    {
+                        LangHelper langHelper = new LangHelper();
+                        copyModels.Remove(this);
+
+                        throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
                     }
                     string newDestinationDir = Path.Combine(targetFolder, subDir.Name);
                     CopyDirectory(subDir, newDestinationDir, totalSize);
@@ -296,9 +339,16 @@ namespace EasySaveV2.Model
                         Thread.Sleep(100);
                     }
                 }
-                else if (isStopped)
+                if (isStopped)
                 {
                     return;
+                }
+                if (!_filtersModel.CheckBusinessApp())
+                {
+                    LangHelper langHelper = new LangHelper();
+                    copyModels.Remove(this);
+
+                    throw new Exception($"{langHelper._rm.GetString("ErrorApp")}");
                 }
 
             }

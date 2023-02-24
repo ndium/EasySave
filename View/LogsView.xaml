@@ -27,8 +27,8 @@
                      Background="Transparent" 
                      Foreground="White" ScrollViewer.CanContentScroll="True" 
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     SelectionMode="Multiple" Height="640" Width="400" SelectedIndex="1" 
-                        HorizontalAlignment="Left">
+                      Height="640" Width="400" SelectedIndex="0" 
+                        Focusable="False" HorizontalAlignment="Left">
                 <ListBox.ItemTemplate>
 
                     <DataTemplate>
