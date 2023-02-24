@@ -31,6 +31,7 @@ namespace EasySaveV2
         private List<Config> listConfigsToCopy;
         private SavesView savesView;
         private CopyViewModel copyViewModel;
+        private Socket serverSocket;
 
         public Server()
         {
@@ -41,7 +42,7 @@ namespace EasySaveV2
         public void ServerTask()
         {
             // Créez une instance de Socket pour écouter les connexions
-            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             // Définissez l'adresse IP et le numéro de port sur lequel le serveur va écouter
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1"); // localhost
@@ -206,7 +207,11 @@ namespace EasySaveV2
                         byte[] messageBytes = System.Text.Encoding.ASCII.GetBytes(resultat);
                         clientSocket.Send(messageBytes);
                         break;
-                    case "refresh":
+                    case "disconnected":
+                        clientSocket.Close();
+                        serverSocket.Close();
+                        
+                        ServerTask();
                         break;
 
                     default:
