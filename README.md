@@ -6,4 +6,4 @@ EasySave is a backup software that allows users to store data (files, folders, e
 
 #Activity diagram
 
-![auto](Activity Diagram 3.0.pdf)
+![auto](.UML 3.0/Activity Diagram 3.0.pdf)
