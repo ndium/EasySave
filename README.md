@@ -14,7 +14,7 @@ EasySave is a versatile backup software developed in C# with .NET. It allows use
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/votre-utilisateur/easysave.git`
+1. Clone the repository: `git clone https://github.com/ndium/EasySave.git`
 2. Open the project in Visual Studio or your preferred C# development environment.
 3. Build the solution and run the application.
 
