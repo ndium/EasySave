@@ -1,5 +1,36 @@
-# EasySave Software
+# EasySave - Backup Software
 
-EasySave is a backup software that allows users to store data (files, folders, etc.) on an alternative medium such as an external hard drive or the cloud. The primary goal is to safeguard data in case of loss or damage to the original storage device. Additionally, users can choose the data to be backed up, select the type of backup, encrypt data for enhanced security, and review logs to track the history of operations. It's worth noting that the software is available in both French and English, providing a multilingual interface.
+## Description
+
+EasySave is a versatile backup software developed in C# with .NET. It allows users to safeguard their data by storing files and folders on alternative mediums such as external hard drives or the cloud. The software offers features such as selective backup, various backup types, data encryption for enhanced security, and a detailed log system to track operation history. EasySave provides a multilingual interface, available in both French and English.
+
+## Features
+
+- Selective backup of files and folders
+- Multiple backup types (full, incremental, etc.)
+- Data encryption for enhanced security
+- Detailed logs to track operation history
+- Multilingual interface (French and English)
+
+## Installation
+
+1. Clone the repository: `git clone https://github.com/votre-utilisateur/easysave.git`
+2. Open the project in Visual Studio or your preferred C# development environment.
+3. Build the solution and run the application.
+
+Follow the on-screen instructions to set up and use EasySave.
+
+## Usage
+
+- Configure backup settings.
+- Choose files and folders for backup.
+- Select backup type and encryption options.
+- Run the backup process.
+
+## Acknowledgments
+
+- Developed during the 3rd year of engineering school in C# with .NET.
+
+## Screenshots
 
 ![image](EasySaveMenuForReadme.png)
